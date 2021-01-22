@@ -18,26 +18,134 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
-int main(void)
-{
+#define LARGURA_TELA 640
+#define ALTURA_TELA 360
 
-    ALLEGRO_DISPLAY *janela = NULL;
-    ALLEGRO_BITMAP *imagem = NULL;
+ALLEGRO_DISPLAY *janela = NULL;
+ALLEGRO_EVENT_QUEUE *filaEventos = NULL;
+ALLEGRO_FONT *fonte = NULL;
+ALLEGRO_BITMAP *background = NULL;
+ALLEGRO_BITMAP *fecharBotao = NULL;
+ALLEGRO_BITMAP *fecharBotao2 = NULL;
 
-    al_init();
-    al_init_image_addon();
+void error_msg(char *text){
+	al_show_native_message_box(NULL,"ERRO",
+		"Ocorreu o seguinte erro e o programa sera finalizado:",
+		text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
+}
 
-    janela = al_create_display(640, 480);
 
-    imagem = al_load_bitmap("sprites/SpriteLogo.bmp");
+int inicializar(){
+    if (!al_init()){
+        error_msg("Falha ao inicializar a Allegro");
+        return 0;
+    }
 
-    al_draw_bitmap(imagem, 0, 0, 0);
+    al_init_font_addon();
+
+    if (!al_init_ttf_addon()){
+        error_msg("Falha ao inicializar add-on allegro_ttf");
+        return 0;
+    }
+
+    if (!al_init_image_addon()){
+        error_msg("Falha ao inicializar add-on allegro_image");
+        return 0;
+    }
+
+    if (!al_install_keyboard()){
+        error_msg("Falha ao inicializar o teclado");
+        return 0;
+    }
+
+    janela = al_create_display(LARGURA_TELA, ALTURA_TELA);
+    if (!janela){
+        error_msg("Falha ao criar janela");
+        return 0;
+    }
+
+    if (!al_install_mouse()){
+        error_msg("Falha ao inicializar o mouse");
+        al_destroy_display(janela);
+        return -1;
+    }
+
+    if (!al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT)){
+        error_msg("Falha ao atribuir ponteiro do mouse");
+        al_destroy_display(janela);
+        return -1;
+    }
+
+    al_set_window_title(janela, "SSClicker");
+    background = al_load_bitmap("resources/background.bmp");
+    fecharBotao = al_load_bitmap("resources/SpriteFechar.bmp");
+    fecharBotao2 = al_load_bitmap("resources/SpriteFechar2.bmp");
+    al_draw_bitmap(background, 0, 0, 0);
     al_flip_display();
 
-    al_rest(10.0);
+    fonte = al_load_font("resources/gamer.ttf", 72, 0);
+    if (!fonte){
+        error_msg("Falha ao carregar \"resources/gamer.ttf\"");
+        al_destroy_display(janela);
+        return 0;
+    }
+
+    filaEventos = al_create_event_queue();
+    if (!filaEventos){
+        error_msg("Falha ao criar fila de eventos");
+        al_destroy_display(janela);
+        return 0;
+    }
+
+    //registra fontes de eventos na fila. o da janela, do mouse, e do teclado
+    al_register_event_source(filaEventos, al_get_keyboard_event_source());
+    al_register_event_source(filaEventos, al_get_display_event_source(janela));
+    al_register_event_source(filaEventos, al_get_mouse_event_source());
+
+    return 1;
+}
+
+int main(void){
+
+    int sair = 0;
+
+    if (!inicializar()){
+        return -1;
+    }
+    while(!sair){
+        while(!al_is_event_queue_empty(filaEventos)){
+            ALLEGRO_EVENT evento;
+            al_wait_for_event(filaEventos, &evento);
+
+            int noBotaoFecharAnterior;
+            if (evento.mouse.x >= 6 &&
+                evento.mouse.x <= 21 &&
+                evento.mouse.y <= 21 &&
+                evento.mouse.y >= 6) {
+
+                al_draw_bitmap(fecharBotao, 6, 6, 0);
+                al_flip_display();
+                noBotaoFecharAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoFecharAnterior){
+                    al_draw_bitmap(fecharBotao2, 6, 6, 0);
+                    al_flip_display();
+                }
+            }
+
+        }
+    }
 
     al_destroy_display(janela);
+    al_destroy_event_queue(filaEventos);
 
     return 0;
 }

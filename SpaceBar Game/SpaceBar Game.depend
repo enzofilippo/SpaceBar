@@ -1,5 +1,8 @@
 # depslib dependency file v1.0
-1611325199 source:c:\users\enfil\documents\projetos\spacebar\spacebar game\main.c
+1611354783 source:c:\users\enfil\documents\projetos\spacebar\spacebar game\main.c
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
 
