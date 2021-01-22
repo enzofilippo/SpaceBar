@@ -488,3 +488,8 @@
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
 
+1611273837 source:c:\users\enfil\documents\projetos\spacebar\pong\main.c
+	<stdio.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+
