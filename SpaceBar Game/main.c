@@ -15,27 +15,50 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#define FPS 30.0
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <math.h>
 
+#define FPS 10.0
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
+
+double dinheiro = 10;
+double custoBaseDormitorio = 10;
+double custoBaseEstufa = 1;
+double custoBaseQuimica = 1;
+double custoBaseFisica = 1;
+double custoBaseRobotica = 1;
+double custoBaseNuclear = 1;
+double prodBaseDormitorio = 0.2;
+double prodBaseEstufa = 1;
+double prodBaseQuimica = 1;
+double prodBaseFisica = 1;
+double prodBaseRobotica = 1;
+double prodBaseNuclear = 1;
+double upgradeMultiplier = 1; //novo jogo - nível 0
+double taxaCrescimento = 1.07;
+
+double dinheiroPorSegundo, ganho, custo, prod;
+double custoDormitorio, custoEstufa, custoQuimica, custoFisica, custoRobotica, custoNuclear;
+double qtdeDormitorio, qtdeEstufa, qtdeQuimica, qtdeFisica, qtdeRobotica, qtdeNuclear;
+double prodDormitorio, prodEstufa, prodQuimica, prodFisica, prodRobotica, prodNuclear;
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *filaEventos = NULL;
 ALLEGRO_EVENT_QUEUE *filaEventosTimer = NULL;
 ALLEGRO_FONT *fonte = NULL;
+ALLEGRO_FONT *fonteMenor = NULL;
 ALLEGRO_BITMAP *background = NULL;
 ALLEGRO_BITMAP *fecharBotao = NULL;
 ALLEGRO_BITMAP *fecharBotao2 = NULL;
 ALLEGRO_BITMAP *botaoLabs = NULL;
 ALLEGRO_BITMAP *botaoLabs2 = NULL;
 ALLEGRO_BITMAP *backgroundDinheiro = NULL;
+ALLEGRO_BITMAP *backgroundUpgrades = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 int noBotaoFecharAnterior;
@@ -103,11 +126,18 @@ int inicializar(){
     botaoLabs = al_load_bitmap("resources/SpriteBotaoLabs.png");
     botaoLabs2 = al_load_bitmap("resources/SpriteBotaoLabs2.png");
     backgroundDinheiro = al_load_bitmap("resources/SpriteBackgroundDinheiro.png");
+    backgroundUpgrades = al_load_bitmap("resources/SpriteBackgroundUpgrades.png");
 
     al_draw_bitmap(background, 0, 0, 0);
     al_flip_display();
 
     fonte = al_load_font("resources/gamer.ttf", 32, 0);
+    if (!fonte){
+        error_msg("Falha ao carregar \"resources/gamer.ttf\"");
+        al_destroy_display(janela);
+        return 0;
+    }
+    fonteMenor = al_load_font("resources/gamer.ttf", 16, 0);
     if (!fonte){
         error_msg("Falha ao carregar \"resources/gamer.ttf\"");
         al_destroy_display(janela);
@@ -133,9 +163,22 @@ int inicializar(){
     al_register_event_source(filaEventos, al_get_mouse_event_source());
     al_register_event_source(filaEventosTimer, al_get_timer_event_source(timer));
 
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "dormitorio: %.0f", qtdeDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseDormitorio);
+
     al_start_timer(timer);
 
     return 1;
+}
+
+double custoCalculo(double custoBase, int qtde){
+    custo = custoBase*pow(taxaCrescimento,qtde);
+    return custo;
+}
+
+double prodCalculo(double prodBase, int qtde, double multiplier){
+    prod = (prodBase*qtde)*multiplier;
+    return prod;
 }
 
 int main(void){
@@ -145,11 +188,6 @@ int main(void){
     if (!inicializar()){
         return -1;
     }
-
-    double dinheiro = 0;
-    double ganho=1;
-    double dinheiroPorSegundo = ganho/FPS;
-
 
     while(!sair){
 
@@ -183,7 +221,16 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                sair = 1;
+                custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio);
+                    if(custoDormitorio<=dinheiro){
+                        qtdeDormitorio += 1;
+                        dinheiro -= custoDormitorio;
+                        prodDormitorio = prodCalculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
+                        al_draw_bitmap(backgroundUpgrades, 53, 282, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "dormitorio: %.0f", qtdeDormitorio);
+                        custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio);
+                        al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
+                    }
                 }
             }else{
                 if(noBotaoLabsAnterior){
@@ -277,11 +324,14 @@ int main(void){
             }
 
         }
-        while(!al_is_event_queue_empty(filaEventosTimer)){ //eventos do tempo
+        while(!al_is_event_queue_empty(filaEventosTimer)){ //atualizar dinheiro na tela
             ALLEGRO_EVENT evento;
             al_wait_for_event(filaEventosTimer, &evento);
 
+            ganho = prodDormitorio + prodEstufa + prodQuimica + prodFisica + prodRobotica + prodNuclear;
+            dinheiroPorSegundo = ganho/FPS;
             dinheiro += dinheiroPorSegundo;
+
             al_draw_bitmap(backgroundDinheiro, 33, 6, 0);
             al_draw_textf(fonte, al_map_rgb(153, 229, 80), LARGURA_TELA - 10, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiro);
         }
