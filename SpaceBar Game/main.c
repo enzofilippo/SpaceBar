@@ -33,8 +33,13 @@ ALLEGRO_FONT *fonte = NULL;
 ALLEGRO_BITMAP *background = NULL;
 ALLEGRO_BITMAP *fecharBotao = NULL;
 ALLEGRO_BITMAP *fecharBotao2 = NULL;
+ALLEGRO_BITMAP *botaoLabs = NULL;
+ALLEGRO_BITMAP *botaoLabs2 = NULL;
 ALLEGRO_BITMAP *backgroundDinheiro = NULL;
 ALLEGRO_TIMER *timer = NULL;
+
+int noBotaoFecharAnterior;
+int noBotaoLabsAnterior;
 
 void error_msg(char *text){
 	al_show_native_message_box(NULL,"ERRO",
@@ -90,11 +95,15 @@ int inicializar(){
         return -1;
     }
 
-    al_set_window_title(janela, "SSClicker");
-    background = al_load_bitmap("resources/background.bmp");
-    fecharBotao = al_load_bitmap("resources/SpriteFechar.bmp");
-    fecharBotao2 = al_load_bitmap("resources/SpriteFechar2.bmp");
-    backgroundDinheiro = al_load_bitmap("resources/SpriteBackgroundDinheiro.bmp");
+    al_set_window_title(janela, "Ultimate Restless Space Station - Feito por Enzo Filippo Centenaro e Vitor Mateus Romancini");
+
+    background = al_load_bitmap("resources/BackgroundFinal.png");
+    fecharBotao = al_load_bitmap("resources/SpriteFechar.png");
+    fecharBotao2 = al_load_bitmap("resources/SpriteFechar2.png");
+    botaoLabs = al_load_bitmap("resources/SpriteBotaoLabs.png");
+    botaoLabs2 = al_load_bitmap("resources/SpriteBotaoLabs2.png");
+    backgroundDinheiro = al_load_bitmap("resources/SpriteBackgroundDinheiro.png");
+
     al_draw_bitmap(background, 0, 0, 0);
     al_flip_display();
 
@@ -136,18 +145,19 @@ int main(void){
     if (!inicializar()){
         return -1;
     }
-    long double dinheiro = 0;
-    long double ganho=1;
-    long double dinheiroPorSegundo = ganho/FPS;
+
+    double dinheiro = 0;
+    double ganho=1;
+    double dinheiroPorSegundo = ganho/FPS;
+
 
     while(!sair){
-        while(!al_is_event_queue_empty(filaEventos)){
+
+        while(!al_is_event_queue_empty(filaEventos)){ //eventos de mouse
             ALLEGRO_EVENT evento;
             al_wait_for_event(filaEventos, &evento);
 
-            int noBotaoFecharAnterior;
-
-            if (evento.mouse.x >= 6 &&
+            if (evento.mouse.x >= 6 &&  //botão para fechar o jogo
                 evento.mouse.x <= 21 &&
                 evento.mouse.y <= 21 &&
                 evento.mouse.y >= 6) {
@@ -163,17 +173,121 @@ int main(void){
                     al_draw_bitmap(fecharBotao2, 6, 6, 0);
                 }
             }
+
+            if (evento.mouse.x >= 2 &&  //botão para comprar dormitório
+                evento.mouse.x <= 21 &&
+                evento.mouse.y <= 299 &&
+                evento.mouse.y >= 279) {
+
+                al_draw_bitmap(botaoLabs, 2, 279, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 2, 279, 0);
+                }
+            }
+
+            if (evento.mouse.x >= 2 &&  //botão para comprar estufa
+                evento.mouse.x <= 21 &&
+                evento.mouse.y <= 327 &&
+                evento.mouse.y >= 307) {
+
+                al_draw_bitmap(botaoLabs, 2, 307, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 2, 307, 0);
+                }
+            }
+
+            if (evento.mouse.x >= 2 &&  //botão para comprar química
+                evento.mouse.x <= 21 &&
+                evento.mouse.y <= 355 &&
+                evento.mouse.y >= 335) {
+
+                al_draw_bitmap(botaoLabs, 2, 335, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 2, 335, 0);
+                }
+            }
+
+            if (evento.mouse.x >= 165 &&  //botão para comprar física
+                evento.mouse.x <= 184 &&
+                evento.mouse.y <= 299 &&
+                evento.mouse.y >= 279) {
+
+                al_draw_bitmap(botaoLabs, 165, 279, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 165, 279, 0);
+                }
+            }
+
+            if (evento.mouse.x >= 165 &&  //botão para comprar robótica
+                evento.mouse.x <= 184 &&
+                evento.mouse.y <= 327 &&
+                evento.mouse.y >= 307) {
+
+                al_draw_bitmap(botaoLabs, 165, 307, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 165, 307, 0);
+                }
+            }
+
+            if (evento.mouse.x >= 165 &&  //botão para comprar nuclear
+                evento.mouse.x <= 184 &&
+                evento.mouse.y <= 355 &&
+                evento.mouse.y >= 335) {
+
+                al_draw_bitmap(botaoLabs, 165, 335, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 165, 335, 0);
+                }
+            }
+
         }
-        while(!al_is_event_queue_empty(filaEventosTimer)){
+        while(!al_is_event_queue_empty(filaEventosTimer)){ //eventos do tempo
             ALLEGRO_EVENT evento;
             al_wait_for_event(filaEventosTimer, &evento);
 
             dinheiro += dinheiroPorSegundo;
             al_draw_bitmap(backgroundDinheiro, 33, 6, 0);
-            al_draw_textf(fonte, al_map_rgb(153, 229, 80), LARGURA_TELA - 10, 0, ALLEGRO_ALIGN_RIGHT, "%.2lf", dinheiro);
+            al_draw_textf(fonte, al_map_rgb(153, 229, 80), LARGURA_TELA - 10, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiro);
         }
         al_flip_display();
     }
+
     al_destroy_timer(timer);
     al_destroy_font(fonte);
     al_destroy_display(janela);
