@@ -22,7 +22,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <math.h>
 
-#define FPS 5.0
+#define FPS 11.0
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
 
@@ -33,13 +33,13 @@ double custoBaseQuimica = 6000;
 double custoBaseFisica = 100000;
 double custoBaseRobotica = 1000000;
 double custoBaseNuclear = 999999999;
-double prodBaseDormitorio = 0.2;
+double prodBaseDormitorio = 1;
 double prodBaseEstufa = 6.5;
-double prodBaseQuimica = 1;
-double prodBaseFisica = 1;
-double prodBaseRobotica = 1;
-double prodBaseNuclear = 1;
-double upgradeMultiplier = 1; //novo jogo - nível 0
+double prodBaseQuimica = 10;
+double prodBaseFisica = 100;
+double prodBaseRobotica = 1000;
+double prodBaseNuclear = 10000;
+double upgradeMultiplier = 100; //novo jogo - nível 0
 double taxaCrescimento = 1.07;
 
 float red_x;
@@ -421,6 +421,7 @@ int main(void){
     al_destroy_font(fonte);
     al_destroy_display(janela);
     al_destroy_event_queue(filaEventos);
+    al_destroy_event_queue(filaEventosTimer);
 
     return 0;
 }
