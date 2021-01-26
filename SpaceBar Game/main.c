@@ -62,7 +62,7 @@ ALLEGRO_BITMAP *botaoLabs = NULL;
 ALLEGRO_BITMAP *botaoLabs2 = NULL;
 ALLEGRO_BITMAP *backgroundDinheiro = NULL;
 ALLEGRO_BITMAP *backgroundUpgrades = NULL;
-backgroundDinheiroPorSegundo = NULL;
+ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 int noBotaoFecharAnterior;
