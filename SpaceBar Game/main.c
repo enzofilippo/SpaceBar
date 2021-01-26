@@ -27,20 +27,27 @@
 #define ALTURA_TELA 360
 
 double dinheiro = 10;
-double custoBaseDormitorio = 10;
-double custoBaseEstufa = 400;
-double custoBaseQuimica = 6000;
-double custoBaseFisica = 100000;
-double custoBaseRobotica = 1000000;
+
+double custoBaseDormitorio = 4;
+double prodBaseDormitorio = 0.2;
+double taxaCrescimentoDormitorio = 1.07;
+double custoBaseEstufa = 60;
+double prodBaseEstufa = 2;
+double taxaCrescimentoEstufa = 1.15;
+double custoBaseQuimica = 720;
+double prodBaseQuimica = 9;
+double taxaCrescimentoQuimica = 1.14;
+double custoBaseFisica = 8640;
+double prodBaseFisica = 36;
+double taxaCrescimentoFisica = 1.13;
+double custoBaseRobotica = 103680;
+double prodBaseRobotica = 216;
+double taxaCrescimentoRobotica = 1.12;
 double custoBaseNuclear = 999999999;
-double prodBaseDormitorio = 1;
-double prodBaseEstufa = 6.5;
-double prodBaseQuimica = 10;
-double prodBaseFisica = 100;
-double prodBaseRobotica = 1000;
 double prodBaseNuclear = 10000;
-double upgradeMultiplier = 100; //novo jogo - nível 0
-double taxaCrescimento = 1.07;
+double taxaCrescimentoNuclear = 1.10;
+
+double upgradeMultiplier = 1; //novo jogo - nível 0
 
 float red_x;
 float red_y;
@@ -202,7 +209,7 @@ int inicializar(){
     return 1;
 }
 
-double custoCalculo(double custoBase, int qtde){
+double custoCalculo(double custoBase, int qtde, double taxaCrescimento){
     custo = custoBase*pow(taxaCrescimento,qtde);
     return custo;
 }
@@ -252,14 +259,14 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio);
+                custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
                     if(custoDormitorio<=dinheiro){
                         qtdeDormitorio += 1;
                         dinheiro -= custoDormitorio;
                         prodDormitorio = prodCalculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
                         al_draw_bitmap(backgroundUpgrades, 53, 279, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
-                        custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio);
+                        custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
                     }
                 }
@@ -278,14 +285,14 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa);
+                custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
                     if(custoEstufa<=dinheiro){
                         qtdeEstufa += 1;
                         dinheiro -= custoEstufa;
                         prodEstufa = prodCalculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplier);
                         al_draw_bitmap(backgroundUpgrades, 53, 307, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
-                        custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa);
+                        custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoEstufa);
                     }
                 }
@@ -304,14 +311,14 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica);
+                custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
                     if(custoQuimica<=dinheiro){
                         qtdeQuimica += 1;
                         dinheiro -= custoQuimica;
                         prodQuimica = prodCalculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplier);
                         al_draw_bitmap(backgroundUpgrades, 53, 335, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
-                        custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica);
+                        custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
                     }
                 }
@@ -330,14 +337,14 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                custoFisica = custoCalculo(custoBaseFisica, qtdeFisica);
+                custoFisica = custoCalculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
                     if(custoFisica<=dinheiro){
                         qtdeFisica += 1;
                         dinheiro -= custoFisica;
                         prodFisica = prodCalculo(prodBaseFisica, qtdeFisica, upgradeMultiplier);
                         al_draw_bitmap(backgroundUpgrades, 216, 279, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
-                        custoFisica = custoCalculo(custoBaseFisica, qtdeFisica);
+                        custoFisica = custoCalculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
                     }
                 }
@@ -356,14 +363,14 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica);
+                custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
                     if(custoRobotica<=dinheiro){
                         qtdeRobotica += 1;
                         dinheiro -= custoRobotica;
                         prodRobotica = prodCalculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplier);
                         al_draw_bitmap(backgroundUpgrades, 216, 307, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
-                        custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica);
+                        custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
                     }
                 }
@@ -382,14 +389,14 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear);
+                custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
                     if(custoNuclear<=dinheiro){
                         qtdeNuclear += 1;
                         dinheiro -= custoNuclear;
                         prodNuclear = prodCalculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplier);
                         al_draw_bitmap(backgroundUpgrades, 216, 335, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
-                        custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear);
+                        custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
                     }
                 }
