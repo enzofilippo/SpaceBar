@@ -47,7 +47,7 @@ double custoBaseNuclear = 999999999;
 double prodBaseNuclear = 10000;
 double taxaCrescimentoNuclear = 1.10;
 
-double upgradeMultiplier = 1; //novo jogo - nível 0
+double upgradeMultiplier = 1; //novo jogo - nï¿½vel 0
 
 float red_x;
 float red_y;
@@ -233,7 +233,7 @@ int main(void){
             ALLEGRO_EVENT evento;
             al_wait_for_event(filaEventos, &evento);
 
-            if (evento.mouse.x >= red_x*6 &&  //botão para fechar o jogo
+            if (evento.mouse.x >= red_x*6 &&  //botï¿½o para fechar o jogo
                 evento.mouse.x <= red_x*21 &&
                 evento.mouse.y <= red_y*21 &&
                 evento.mouse.y >= red_y*6) {
@@ -250,7 +250,24 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*2 &&  //botão para comprar dormitório
+            if (evento.mouse.x >= red_x*50 &&  //botï¿½o para clicar no satÃ©lite
+                evento.mouse.x <= red_x*60 &&
+                evento.mouse.y <= red_y*170 &&
+                evento.mouse.y >= red_y*180) {
+
+                al_draw_bitmap(fecharBotao, 50, 170, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 50, 170, 0);
+                }
+            }
+
+            if (evento.mouse.x >= red_x*2 &&  //botï¿½o para comprar dormitï¿½rio
                 evento.mouse.x <= red_x*21 &&
                 evento.mouse.y <= red_y*299 &&
                 evento.mouse.y >= red_y*279) {
@@ -276,7 +293,7 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*2 &&  //botão para comprar estufa
+            if (evento.mouse.x >= red_x*2 &&  //botï¿½o para comprar estufa
                 evento.mouse.x <= red_x*21 &&
                 evento.mouse.y <= red_y*327 &&
                 evento.mouse.y >= red_y*307) {
@@ -302,7 +319,7 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*2 &&  //botão para comprar química
+            if (evento.mouse.x >= red_x*2 &&  //botï¿½o para comprar quï¿½mica
                 evento.mouse.x <= red_x*21 &&
                 evento.mouse.y <= red_y*355 &&
                 evento.mouse.y >= red_y*335) {
@@ -328,7 +345,7 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*165 &&  //botão para comprar física
+            if (evento.mouse.x >= red_x*165 &&  //botï¿½o para comprar fï¿½sica
                 evento.mouse.x <= red_x*184 &&
                 evento.mouse.y <= red_y*299 &&
                 evento.mouse.y >= red_y*279) {
@@ -354,7 +371,7 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*165 &&  //botão para comprar robótica
+            if (evento.mouse.x >= red_x*165 &&  //botï¿½o para comprar robï¿½tica
                 evento.mouse.x <= red_x*184 &&
                 evento.mouse.y <= red_y*327 &&
                 evento.mouse.y >= red_y*307) {
@@ -380,7 +397,7 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*165 &&  //botão para comprar nuclear
+            if (evento.mouse.x >= red_x*165 &&  //botï¿½o para comprar nuclear
                 evento.mouse.x <= red_x*184 &&
                 evento.mouse.y <= red_y*355 &&
                 evento.mouse.y >= red_y*335) {
