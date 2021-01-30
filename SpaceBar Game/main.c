@@ -28,6 +28,7 @@
 
 double dinheiro = 10;
 
+double prodBaseBotao = 1;
 double custoBaseDormitorio = 4;
 double prodBaseDormitorio = 0.2;
 double taxaCrescimentoDormitorio = 1.07;
@@ -259,7 +260,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                
+                prodBotao = prodCalculo(prodBaseBotao,upgradeMultiplier)
                 }
             }else{
                 if(noBotaoLabsAnterior){
