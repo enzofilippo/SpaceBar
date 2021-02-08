@@ -69,12 +69,13 @@ ALLEGRO_BITMAP *fecharBotao2 = NULL;
 ALLEGRO_BITMAP *botaoLabs = NULL;
 ALLEGRO_BITMAP *botaoLabs2 = NULL;
 ALLEGRO_BITMAP *backgroundDinheiro = NULL;
-ALLEGRO_BITMAP *backgroundUpgrades = NULL;
+ALLEGRO_BITMAP *backgroundLabs = NULL;
 ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 int noBotaoFecharAnterior;
 int noBotaoLabsAnterior;
+int noBotaoSateliteAnterior;
 
 void error_msg(char *text){
 	al_show_native_message_box(NULL,"ERRO",
@@ -153,7 +154,7 @@ int inicializar(){
     botaoLabs = al_load_bitmap("resources/SpriteBotaoLabs.png");
     botaoLabs2 = al_load_bitmap("resources/SpriteBotaoLabs2.png");
     backgroundDinheiro = al_load_bitmap("resources/SpriteBackgroundDinheiro.png");
-    backgroundUpgrades = al_load_bitmap("resources/SpriteBackgroundUpgrades.png");
+    backgroundLabs = al_load_bitmap("resources/SpriteBackgroundLabs.png");
     backgroundDinheiroPorSegundo = al_load_bitmap("resources/SpriteBackgroundDinheiroPorSegundo.png");
 
     al_draw_bitmap(background, 0, 0, 0);
@@ -251,20 +252,21 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*50 &&  //bot�o para clicar no satélite
-                evento.mouse.x <= red_x*60 &&
-                evento.mouse.y <= red_y*170 &&
-                evento.mouse.y >= red_y*180) {
+            if (evento.mouse.x >= red_x*5 &&  //bot�o para clicar no satélite
+                evento.mouse.x <= red_x*564 &&
+                evento.mouse.y <= red_y*271 &&
+                evento.mouse.y >= red_y*32) {
 
-                al_draw_bitmap(fecharBotao, 50, 170, 0);
-                noBotaoLabsAnterior = 1;
+                noBotaoSateliteAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                prodBotao = prodCalculo(prodBaseBotao,upgradeMultiplier)
+                    dinheiro += upgradeMultiplier;
+                    al_draw_bitmap(backgroundDinheiro, 263, 6, 0);
+                    al_draw_textf(fonte, al_map_rgb(255, 255, 255), LARGURA_TELA - 38, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiro);
                 }
             }else{
-                if(noBotaoLabsAnterior){
-                    al_draw_bitmap(botaoLabs2, 50, 170, 0);
+                if(noBotaoSateliteAnterior){
+
                 }
             }
 
@@ -282,7 +284,7 @@ int main(void){
                         qtdeDormitorio += 1;
                         dinheiro -= custoDormitorio;
                         prodDormitorio = prodCalculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
-                        al_draw_bitmap(backgroundUpgrades, 53, 279, 0);
+                        al_draw_bitmap(backgroundLabs, 53, 279, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
                         custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
@@ -308,7 +310,7 @@ int main(void){
                         qtdeEstufa += 1;
                         dinheiro -= custoEstufa;
                         prodEstufa = prodCalculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplier);
-                        al_draw_bitmap(backgroundUpgrades, 53, 307, 0);
+                        al_draw_bitmap(backgroundLabs, 53, 307, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
                         custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoEstufa);
@@ -334,7 +336,7 @@ int main(void){
                         qtdeQuimica += 1;
                         dinheiro -= custoQuimica;
                         prodQuimica = prodCalculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplier);
-                        al_draw_bitmap(backgroundUpgrades, 53, 335, 0);
+                        al_draw_bitmap(backgroundLabs, 53, 335, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
                         custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
@@ -360,7 +362,7 @@ int main(void){
                         qtdeFisica += 1;
                         dinheiro -= custoFisica;
                         prodFisica = prodCalculo(prodBaseFisica, qtdeFisica, upgradeMultiplier);
-                        al_draw_bitmap(backgroundUpgrades, 216, 279, 0);
+                        al_draw_bitmap(backgroundLabs, 216, 279, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
                         custoFisica = custoCalculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
@@ -386,7 +388,7 @@ int main(void){
                         qtdeRobotica += 1;
                         dinheiro -= custoRobotica;
                         prodRobotica = prodCalculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplier);
-                        al_draw_bitmap(backgroundUpgrades, 216, 307, 0);
+                        al_draw_bitmap(backgroundLabs, 216, 307, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
                         custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
@@ -412,7 +414,7 @@ int main(void){
                         qtdeNuclear += 1;
                         dinheiro -= custoNuclear;
                         prodNuclear = prodCalculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplier);
-                        al_draw_bitmap(backgroundUpgrades, 216, 335, 0);
+                        al_draw_bitmap(backgroundLabs, 216, 335, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
                         custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
