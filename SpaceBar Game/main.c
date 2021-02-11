@@ -20,6 +20,8 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <math.h>
 
 #define FPS 11.0
@@ -72,6 +74,7 @@ ALLEGRO_BITMAP *backgroundLabs = NULL;
 ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
 ALLEGRO_BITMAP *backgroundMonitor = NULL;
 ALLEGRO_TIMER *timer = NULL;
+ALLEGRO_AUDIO_STREAM *musica = NULL;
 
 int noBotaoFecharAnterior;
 int noBotaoLabsAnterior;
@@ -89,6 +92,30 @@ int inicializar(){
         error_msg("Falha ao inicializar a Allegro");
         return 0;
     }
+
+    if(!al_install_audio()){
+        error_msg("Falha ao inicializar o audio");
+        return 0;
+    }
+
+    if(!al_init_acodec_addon()){
+        error_msg("Falha ao inicializar o codec de audio");
+        return 0;
+    }
+
+    if (!al_reserve_samples(5)){
+        error_msg("Falha ao reservar amostrar de audio");
+        return 0;
+    }
+
+    musica = al_load_audio_stream("resources/soundtrack.ogg", 4, 1024);
+    if (!musica){
+        error_msg( "Audio nao carregado" );
+        return 0;
+    }
+
+    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
+    al_set_audio_stream_playmode(musica, ALLEGRO_PLAYMODE_LOOP);
 
     timer = al_create_timer(1.0 / FPS);
     if(!timer) {
