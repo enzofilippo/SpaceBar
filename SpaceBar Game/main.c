@@ -26,25 +26,24 @@
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
 
-double dinheiro = 10;
+double dinheiro = 100000000000;
 
-double prodBaseBotao = 1;
-double custoBaseDormitorio = 4;
+double custoBaseDormitorio = 10;
 double prodBaseDormitorio = 0.2;
 double taxaCrescimentoDormitorio = 1.07;
-double custoBaseEstufa = 60;
+double custoBaseEstufa = 420;
 double prodBaseEstufa = 2;
 double taxaCrescimentoEstufa = 1.15;
-double custoBaseQuimica = 720;
+double custoBaseQuimica = 1926;
 double prodBaseQuimica = 9;
 double taxaCrescimentoQuimica = 1.14;
-double custoBaseFisica = 8640;
+double custoBaseFisica = 314159;
 double prodBaseFisica = 36;
 double taxaCrescimentoFisica = 1.13;
-double custoBaseRobotica = 103680;
+double custoBaseRobotica = 1000101;
 double prodBaseRobotica = 216;
 double taxaCrescimentoRobotica = 1.12;
-double custoBaseNuclear = 999999999;
+double custoBaseNuclear = 713000000;
 double prodBaseNuclear = 10000;
 double taxaCrescimentoNuclear = 1.10;
 
@@ -71,6 +70,7 @@ ALLEGRO_BITMAP *botaoLabs2 = NULL;
 ALLEGRO_BITMAP *backgroundDinheiro = NULL;
 ALLEGRO_BITMAP *backgroundLabs = NULL;
 ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
+ALLEGRO_BITMAP *backgroundMonitor = NULL;
 ALLEGRO_TIMER *timer = NULL;
 
 int noBotaoFecharAnterior;
@@ -156,6 +156,7 @@ int inicializar(){
     backgroundDinheiro = al_load_bitmap("resources/SpriteBackgroundDinheiro.png");
     backgroundLabs = al_load_bitmap("resources/SpriteBackgroundLabs.png");
     backgroundDinheiroPorSegundo = al_load_bitmap("resources/SpriteBackgroundDinheiroPorSegundo.png");
+    backgroundMonitor = al_load_bitmap("resources/SpriteBackgroundMonitor.png");
 
     al_draw_bitmap(background, 0, 0, 0);
 
@@ -241,6 +242,10 @@ int main(void){
                 evento.mouse.y >= red_y*6) {
 
                 al_draw_bitmap(fecharBotao, 6, 6, 0);
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Sério que você vai");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "fechar o jogo? AFF");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "Vou chamar o Putin");
                 noBotaoFecharAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
@@ -249,6 +254,10 @@ int main(void){
             }else{
                 if(noBotaoFecharAnterior){
                     al_draw_bitmap(fecharBotao2, 6, 6, 0);
+                    al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                    al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Não sei o que seria");
+                    al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "da estação URSS");
+                    al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "sem você! <3");
                 }
             }
 
@@ -275,6 +284,10 @@ int main(void){
                 evento.mouse.y <= red_y*299 &&
                 evento.mouse.y >= red_y*279) {
 
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre camas camarada,");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "assim mais cientistas");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "podem vir fazer ciência!!!");
                 al_draw_bitmap(botaoLabs, 2, 279, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -288,6 +301,11 @@ int main(void){
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
                         custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Eu nem sabia que tinha");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,281 , ALLEGRO_ALIGN_LEFT, "camas no espaço...");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,289 , ALLEGRO_ALIGN_LEFT, "Mas foi você que pagou");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "Então ta tudo certo!");
                     }
                 }
             }else{
@@ -301,6 +319,10 @@ int main(void){
                 evento.mouse.y <= red_y*327 &&
                 evento.mouse.y >= red_y*307) {
 
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Quem disse que não dá,");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "pra plantar no espaço?");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "malditos yankes!!!");
                 al_draw_bitmap(botaoLabs, 2, 307, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -314,6 +336,10 @@ int main(void){
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
                         custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoEstufa);
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Pra plantar soja não");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "precisa TCC!!!");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "¯\\_(^_^)_/¯ ");
                     }
                 }
             }else{
@@ -327,6 +353,10 @@ int main(void){
                 evento.mouse.y <= red_y*355 &&
                 evento.mouse.y >= red_y*335) {
 
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                 al_draw_bitmap(botaoLabs, 2, 335, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -340,6 +370,10 @@ int main(void){
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
                         custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                     }
                 }
             }else{
@@ -353,6 +387,10 @@ int main(void){
                 evento.mouse.y <= red_y*299 &&
                 evento.mouse.y >= red_y*279) {
 
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                 al_draw_bitmap(botaoLabs, 165, 279, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -366,6 +404,10 @@ int main(void){
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
                         custoFisica = custoCalculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                     }
                 }
             }else{
@@ -379,6 +421,10 @@ int main(void){
                 evento.mouse.y <= red_y*327 &&
                 evento.mouse.y >= red_y*307) {
 
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                 al_draw_bitmap(botaoLabs, 165, 307, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -392,6 +438,10 @@ int main(void){
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
                         custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                     }
                 }
             }else{
@@ -405,6 +455,10 @@ int main(void){
                 evento.mouse.y <= red_y*355 &&
                 evento.mouse.y >= red_y*335) {
 
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                 al_draw_bitmap(botaoLabs, 165, 335, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -418,6 +472,10 @@ int main(void){
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
                         custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "texto");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "texto");
                     }
                 }
             }else{
