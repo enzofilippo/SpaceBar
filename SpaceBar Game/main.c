@@ -537,3 +537,34 @@ int main(void){
 
     return 0;
 }
+
+//upgrades testes 
+
+ if (evento.mouse.x >= red_x*165 &&  //botao upgrade dormitorio 
+                evento.mouse.x <= red_x* &&
+                evento.mouse.y <= red_y* &&
+                evento.mouse.y >= red_y*) {
+
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_bitmap(botaoLabs, 165, 307, 0);
+                noBotaoLabsAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                custoUpgradeDormitorio = custoCalculo(custoUpgradeDormitorio);
+                    if(custoUpgradeDormitorio<=dinheiro){
+                        dinheiro -= custoUpgradeDormitorio;
+                        upgradeMultiplier = 1.5; 
+                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                    }
+                }
+            }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoLabs2, 165, 307, 0);
+                }
+            }
