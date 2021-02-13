@@ -74,6 +74,7 @@ ALLEGRO_BITMAP *backgroundLabs = NULL;
 ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
 ALLEGRO_BITMAP *backgroundMonitor = NULL;
 ALLEGRO_TIMER *timer = NULL;
+ALLEGRO_SAMPLE *som_botao = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 
 int noBotaoFecharAnterior;
@@ -108,8 +109,15 @@ int inicializar(){
         return 0;
     }
 
+    som_botao = al_load_sample( "resources/buttonSound.ogg" );
+    if (!som_botao){
+        error_msg( "Audio nao carregado" );
+        return 0;
+    }
+
     musica = al_load_audio_stream("resources/soundtrack.ogg", 4, 1024);
     if (!musica){
+        al_destroy_sample(som_botao);
         error_msg( "Audio nao carregado" );
         return 0;
     }
@@ -319,6 +327,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                 custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
                     if(custoDormitorio<=dinheiro){
                         qtdeDormitorio += 1;
@@ -354,6 +363,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                 custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
                     if(custoEstufa<=dinheiro){
                         qtdeEstufa += 1;
@@ -388,6 +398,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                 custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
                     if(custoQuimica<=dinheiro){
                         qtdeQuimica += 1;
@@ -422,6 +433,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                 custoFisica = custoCalculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
                     if(custoFisica<=dinheiro){
                         qtdeFisica += 1;
@@ -456,6 +468,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                 custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
                     if(custoRobotica<=dinheiro){
                         qtdeRobotica += 1;
@@ -490,6 +503,7 @@ int main(void){
                 noBotaoLabsAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                 custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
                     if(custoNuclear<=dinheiro){
                         qtdeNuclear += 1;
@@ -529,6 +543,8 @@ int main(void){
         al_flip_display();
     }
 
+    al_destroy_sample(som_botao);
+    al_destroy_audio_stream(musica);
     al_destroy_timer(timer);
     al_destroy_font(fonte);
     al_destroy_display(janela);
