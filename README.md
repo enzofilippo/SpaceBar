@@ -1,4 +1,4 @@
-# SpaceBar
+# URSS
  Jogo para disciplina de algoritmos computacionais
 ## Criadores:
  - Enzo Filippo Centenaro
