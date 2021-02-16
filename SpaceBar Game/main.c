@@ -198,7 +198,7 @@ int inicializar(){
     BotaoUpgrade = al_load_bitmap("resources/Botão Upgrade.png");
     botaoupgrade1 = al_load_bitmap("resources/botaoup1.png");
     botaoupgrade2 = al_load_bitmap("resources/botaoup2.png");
-    
+
     al_draw_bitmap(background, 0, 0, 0);
 
     fonte = al_load_font("resources/gamer.ttf", 32, 0);
@@ -532,24 +532,24 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*570 &&  //botao upgrade dormitorio 
+            if (evento.mouse.x >= red_x*570 &&  //botao upgrade dormitorio
                 evento.mouse.x <= red_x*637 &&
                 evento.mouse.y <= red_y*50 &&
                 evento.mouse.y >= red_y*75) {
 
-                
-    
+
+
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
                 al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "frase");
                 al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "frase");
                 al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "frase");
-                 al_draw_bitmap(botaoupgrade2, 51, 636, 0);
-                noBotaoLabsAnterior = 1; 
+                al_draw_bitmap(botaoupgrade2, 51, 636, 0);
+                noBotaoLabsAnterior = 1;
 
             if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
             al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
             custoDormitorioUpgrade = custoCalculo(custoBaseDormitorioUpgrade);
-        
+
              if(custoDormitorioUpgrade <=dinheiro){
                  al_draw_bitmap(BotaoUpgrade, 570, 75, 0);
                  qtdeUpgradeDormitorio = 1;
