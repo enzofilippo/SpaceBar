@@ -1,5 +1,9 @@
 # depslib dependency file v1.0
+<<<<<<< Updated upstream
 1611618626 source:c:\users\enfil\documents\projetos\spacebar\spacebar game\main.c
+=======
+1613507319 source:c:\users\enfil\documents\projetos\spacebar\spacebar game\main.c
+>>>>>>> Stashed changes
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
 	<allegro5/allegro_native_dialog.h>
