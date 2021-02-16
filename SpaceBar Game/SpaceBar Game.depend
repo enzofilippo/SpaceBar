@@ -9,3 +9,13 @@
 	<allegro5/allegro_acodec.h>
 	<math.h>
 
+1613309215 source:c:\users\vitor\onedrive\documents\github\spacebar game\main.c
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
+	<math.h>
+

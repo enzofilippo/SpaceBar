@@ -48,15 +48,17 @@ double taxaCrescimentoRobotica = 1.12;
 double custoBaseNuclear = 713000000;
 double prodBaseNuclear = 10000;
 double taxaCrescimentoNuclear = 1.10;
+double custoBaseDormitorioUpgrade = 111;
+double prodBaseUpgrade = 1.5;
 
-double upgradeMultiplier = 1; //novo jogo - n�vel 0
+double upgradeMultiplier = 1.5; //novo jogo - n�vel 0
 
 float red_x;
 float red_y;
 
 double incrementoPorFrame, dinheiroPorSegundo, custo, prod;
-double custoDormitorio, custoEstufa, custoQuimica, custoFisica, custoRobotica, custoNuclear;
-double qtdeDormitorio, qtdeEstufa, qtdeQuimica, qtdeFisica, qtdeRobotica, qtdeNuclear;
+double custoDormitorio, custoEstufa, custoQuimica, custoFisica, custoRobotica, custoNuclear,custoDormitorioUpgrade;
+double qtdeDormitorio, qtdeEstufa, qtdeQuimica, qtdeFisica, qtdeRobotica, qtdeNuclear,qtdeUpgradeDormitorio;
 double prodDormitorio, prodEstufa, prodQuimica, prodFisica, prodRobotica, prodNuclear;
 
 ALLEGRO_DISPLAY *janela = NULL;
@@ -76,6 +78,7 @@ ALLEGRO_BITMAP *backgroundMonitor = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_SAMPLE *som_botao = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
+ALLEGRO_BITMAP *BotaoUpgrade = NULL;
 
 int noBotaoFecharAnterior;
 int noBotaoLabsAnterior;
@@ -192,7 +195,10 @@ int inicializar(){
     backgroundLabs = al_load_bitmap("resources/SpriteBackgroundLabs.png");
     backgroundDinheiroPorSegundo = al_load_bitmap("resources/SpriteBackgroundDinheiroPorSegundo.png");
     backgroundMonitor = al_load_bitmap("resources/SpriteBackgroundMonitor.png");
-
+    BotaoUpgrade = al_load_bitmap("resources/Botão Upgrade.png");
+    botaoupgrade1 = al_load_bitmap("resources/botaoup1.png");
+    botaoupgrade2 = al_load_bitmap("resources/botaoup2.png");
+    
     al_draw_bitmap(background, 0, 0, 0);
 
     fonte = al_load_font("resources/gamer.ttf", 32, 0);
@@ -239,6 +245,8 @@ int inicializar(){
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseRobotica);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseNuclear);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "Upgrade: %.0f", qtdeUpgradeDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorioUpgrade);
 
     al_flip_display();
 
@@ -524,7 +532,42 @@ int main(void){
                 }
             }
 
+            if (evento.mouse.x >= red_x*570 &&  //botao upgrade dormitorio 
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*50 &&
+                evento.mouse.y >= red_y*75) {
+
+                
+    
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "frase");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "frase");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "frase");
+                 al_draw_bitmap(botaoupgrade2, 51, 636, 0);
+                noBotaoLabsAnterior = 1; 
+
+            if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+            al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+            custoDormitorioUpgrade = custoCalculo(custoBaseDormitorioUpgrade);
+        
+             if(custoDormitorioUpgrade <=dinheiro){
+                 al_draw_bitmap(BotaoUpgrade, 570, 75, 0);
+                 qtdeUpgradeDormitorio = 1;
+                        dinheiro -= custoDormitorioUpgrade;
+                 upgradeMultiplier = prodCalculo(prodBaseUpgrade);
+                 al_draw_bitmap(backgroundLabs, 53, 279, 0);
+                        al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "Upgrade: %.0f", qtdeUpgradeDormitorio);
+                        custoDormitorioUpgrade = custoCalculo(custoBaseDormitorioUpgrade);
+                        al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f",custoDormitorioUpgrade);
+
+          }
         }
+        }else{
+                if(noBotaoLabsAnterior){
+                    al_draw_bitmap(botaoupgrade1, 570, 75, 0);
+                }
+            }
+
         while(!al_is_event_queue_empty(filaEventosTimer)){ //atualizar dinheiro na tela
             ALLEGRO_EVENT evento;
             al_wait_for_event(filaEventosTimer, &evento);
