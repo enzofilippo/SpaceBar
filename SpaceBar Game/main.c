@@ -1,6 +1,6 @@
 /*
  * This file is part of the enzofilippo distribution (https://github.com/enzofilippo).
- * Copyright (c) 2021 Enzo Filippo Centenaro da Silva.
+ * Copyright (c) 2021 Enzo Filippo Centenaro da Silva and Vitor Mateus Romancini do Amaral.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,6 +78,8 @@ ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
 ALLEGRO_BITMAP *backgroundMonitor = NULL;
 ALLEGRO_BITMAP *backgroundUpgrade = NULL;
 ALLEGRO_BITMAP *backgroundUpgrade2 = NULL;
+ALLEGRO_BITMAP *botaoSavegame = NULL;
+ALLEGRO_BITMAP *botaoSavegame2 = NULL;
 ALLEGRO_BITMAP *led = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_SAMPLE *som_botao = NULL;
@@ -87,6 +89,7 @@ ALLEGRO_AUDIO_STREAM *musica = NULL;
 int noBotaoFecharAnterior;
 int noBotaoLabsAnterior;
 int noBotaoSateliteAnterior;
+int noBotaoSavegameAnterior;
 
 void error_msg(char *text){
 	al_show_native_message_box(NULL,"ERRO",
@@ -94,6 +97,49 @@ void error_msg(char *text){
 		text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
 }
 
+int novoJogo(){
+    incrementoPorFrame=0;
+    dinheiroPorSegundo=0;
+    custoDormitorio=custoBaseDormitorio;
+    custoEstufa=custoBaseEstufa;
+    custoQuimica=custoBaseQuimica;
+    custoFisica=custoBaseFisica;
+    custoRobotica=custoBaseRobotica;
+    custoNuclear=custoBaseNuclear;
+    qtdeDormitorio=0;
+    qtdeEstufa=0;
+    qtdeQuimica=0;
+    qtdeFisica=0;
+    qtdeRobotica=0;
+    qtdeNuclear=0;
+    prodDormitorio=prodBaseDormitorio;
+    prodEstufa=prodBaseEstufa;
+    prodQuimica=prodBaseQuimica;
+    prodFisica=prodBaseFisica;
+    prodRobotica=prodBaseRobotica;
+    prodNuclear=prodBaseNuclear;
+    int upgradeVodka=0;
+
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseEstufa);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseQuimica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseFisica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseRobotica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseNuclear);
+
+    al_draw_bitmap(backgroundDinheiroPorSegundo, 88, 6, 0);
+    al_draw_textf(fonte, al_map_rgb(153, 229, 80), 256, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiroPorSegundo);
+    al_draw_bitmap(backgroundDinheiro, 263, 6, 0);
+    al_draw_textf(fonte, al_map_rgb(255, 255, 255), LARGURA_TELA - 38, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiro);
+
+    return 0;
+}
 
 int inicializar(){
     if (!al_init()){
@@ -209,6 +255,8 @@ int inicializar(){
     backgroundMonitor = al_load_bitmap("resources/SpriteBackgroundMonitor.png");
     backgroundUpgrade = al_load_bitmap("resources/SpriteBotaoUpgrade.png");
     backgroundUpgrade2 = al_load_bitmap("resources/SpriteBotaoUpgrade2.png");
+    botaoSavegame = al_load_bitmap("resources/spriteSavegame.png");
+    botaoSavegame2 = al_load_bitmap("resources/spriteSavegame2.png");
     led = al_load_bitmap("resources/SpriteLuzLigada.png");
 
     al_draw_bitmap(background, 0, 0, 0);
@@ -311,6 +359,23 @@ int main(void){
                     al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Não sei o que seria");
                     al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "da estação sem você ");
                     al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "camarada! <3");
+                }
+            }
+
+            if (evento.mouse.x >= red_x*622 &&  //bot�o para clicar no savegame
+                evento.mouse.x <= red_x*635 &&
+                evento.mouse.y <= red_y*268 &&
+                evento.mouse.y >= red_y*255) {
+
+                noBotaoSavegameAnterior = 1;
+                al_draw_bitmap(botaoSavegame, 622, 255, 0);
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                }
+            }else{
+                if(noBotaoSavegameAnterior){
+                    al_draw_bitmap(botaoSavegame2, 622, 255, 0);
                 }
             }
 
