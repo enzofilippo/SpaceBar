@@ -23,12 +23,15 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define FPS 11.0
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
+#define MAX_LEN 256
 
-double dinheiro = 0;
+double dinheiro = 100;
 
 double custoBaseDormitorio = 10;
 double prodBaseDormitorio = 0.2;
@@ -88,6 +91,8 @@ ALLEGRO_SAMPLE *som_botao = NULL;
 ALLEGRO_SAMPLE *som_semDinheiro = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 
+FILE *save;
+
 int noBotaoFecharAnterior;
 int noBotaoLabsAnterior;
 int noBotaoSateliteAnterior;
@@ -100,33 +105,14 @@ void error_msg(char *text){
 		text,NULL,ALLEGRO_MESSAGEBOX_ERROR);
 }
 
-int novoJogo(){
+double custoCalculo(double custoBase, double qtde, double taxaCrescimento){
+    custo = custoBase*pow(taxaCrescimento,qtde);
+    return custo;
+}
 
-    incrementoPorFrame=0;
-    dinheiroPorSegundo=0;
-    dinheiro=0;
-    upgradeMultiplier=1;
-    custoDormitorio=custoBaseDormitorio;
-    custoEstufa=custoBaseEstufa;
-    custoQuimica=custoBaseQuimica;
-    custoFisica=custoBaseFisica;
-    custoRobotica=custoBaseRobotica;
-    custoNuclear=custoBaseNuclear;
-    qtdeDormitorio=0;
-    qtdeEstufa=0;
-    qtdeQuimica=0;
-    qtdeFisica=0;
-    qtdeRobotica=0;
-    qtdeNuclear=0;
-    prodDormitorio=0;
-    prodEstufa=0;
-    prodQuimica=0;
-    prodFisica=0;
-    prodRobotica=0;
-    prodNuclear=0;
-    upgradeVodka=0;
-
-    return 0;
+double prodCalculo(double prodBase, double qtde, double multiplier){
+    prod = (prodBase*qtde)*multiplier;
+    return prod;
 }
 
 int inicializar(){
@@ -277,24 +263,57 @@ int inicializar(){
         return 0;
     }
 
-    //registra fontes de eventos na fila. o da janela, do mouse, e do teclado
+    double dadosSave[9], dado;
+    save = fopen("save.txt","r");
+    for(int i=0;i<9;i++){
+        fscanf(save,"%lf",&dado);
+        dadosSave[i] = dado;
+    }
+    fclose(save);
+
+    dinheiro = dadosSave[0];
+    upgradeMultiplier = dadosSave[1];
+    qtdeDormitorio = dadosSave[2];
+    qtdeEstufa = dadosSave[3];
+    qtdeQuimica= dadosSave[4];
+    qtdeFisica= dadosSave[5];
+    qtdeRobotica= dadosSave[6];
+    qtdeNuclear= dadosSave[7];
+    upgradeVodka= dadosSave[8];
+    prodDormitorio = prodCalculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
+    prodEstufa = prodCalculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplier);
+    prodQuimica = prodCalculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplier);
+    prodFisica = prodCalculo(prodBaseFisica, qtdeFisica, upgradeMultiplier);
+    prodRobotica = prodCalculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplier);
+    prodNuclear = prodCalculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplier);
+    custoDormitorio = custoCalculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
+    custoEstufa = custoCalculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
+    custoQuimica = custoCalculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
+    custoFisica = custoCalculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
+    custoRobotica = custoCalculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
+    custoNuclear = custoCalculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
+
+    if(upgradeVodka){
+        al_draw_bitmap(led, 553, 50, 0);
+    }
+
     al_register_event_source(filaEventos, al_get_keyboard_event_source());
     al_register_event_source(filaEventos, al_get_display_event_source(janela));
     al_register_event_source(filaEventos, al_get_mouse_event_source());
     al_register_event_source(filaEventosTimer, al_get_timer_event_source(timer));
 
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseEstufa);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoEstufa);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseQuimica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseFisica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseRobotica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
     al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseNuclear);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
 
     al_flip_display();
 
@@ -303,14 +322,22 @@ int inicializar(){
     return 1;
 }
 
-double custoCalculo(double custoBase, int qtde, double taxaCrescimento){
-    custo = custoBase*pow(taxaCrescimento,qtde);
-    return custo;
-}
+int saveGame(double d,double uM,double qD,double qE,double qQ,double qF,double qR,double qN,int uV){
 
-double prodCalculo(double prodBase, int qtde, double multiplier){
-    prod = (prodBase*qtde)*multiplier;
-    return prod;
+    save = fopen("save.txt","w");
+    fprintf(save,"%.2f\n",d);
+    fprintf(save,"%.2f\n",uM);
+    fprintf(save,"%.2f\n",qD);
+    fprintf(save,"%.2f\n",qE);
+    fprintf(save,"%.2f\n",qQ);
+    fprintf(save,"%.2f\n",qF);
+    fprintf(save,"%.2f\n",qR);
+    fprintf(save,"%.2f\n",qN);
+    fprintf(save,"%d\n",uV);
+    fclose(save);
+
+    return 0;
+
 }
 
 int main(void){
@@ -362,6 +389,7 @@ int main(void){
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                    saveGame(dinheiro,upgradeMultiplier,qtdeDormitorio,qtdeEstufa,qtdeQuimica,qtdeFisica,qtdeRobotica,qtdeNuclear,upgradeVodka);
                 }
             }else{
                 if(noBotaoSavegameAnterior){
@@ -380,18 +408,18 @@ int main(void){
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     int iniciarNovoJogo = al_show_native_message_box(
                         janela,
-                        "Você clicou em novo jogo!",
+                        "URSS - Ultimate Restless Space Station",
                         "Previet Camarada",
                         "Tem certeza que quer nos abandonar? "
                         "Ficaremos a mercê do esquecimento eterno, "
                         "ou pior, dos capitalistas! "
-                        "Escolha com sabedoria.",
+                        "Escolha com sabedoria. Tudo que foi salvo será apagado.",
                         NULL,
                         ALLEGRO_MESSAGEBOX_YES_NO
                         );
                     if (iniciarNovoJogo){
                         al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
-                        novoJogo();
+                        saveGame(0,1,0,0,0,0,0,0,0);
                         al_destroy_sample(som_botao);
                         al_destroy_audio_stream(musica);
                         al_destroy_timer(timer);
