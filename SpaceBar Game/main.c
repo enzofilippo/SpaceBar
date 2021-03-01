@@ -29,10 +29,8 @@
 #define FPS 11.0
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
-#define MAX_LEN 256
 
-double dinheiro = 100;
-
+double dinheiro = 0;
 double custoBaseDormitorio = 10;
 double prodBaseDormitorio = 0.2;
 double taxaCrescimentoDormitorio = 1.07;
@@ -52,7 +50,7 @@ double custoBaseNuclear = 713000000;
 double prodBaseNuclear = 10000;
 double taxaCrescimentoNuclear = 1.10;
 
-double custoUpgradeVodka = 1;
+double custoUpgradeVodka = 250000;
 
 double upgradeMultiplier = 1; //novo jogo - n�vel 0
 
