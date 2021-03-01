@@ -80,6 +80,8 @@ ALLEGRO_BITMAP *backgroundUpgrade = NULL;
 ALLEGRO_BITMAP *backgroundUpgrade2 = NULL;
 ALLEGRO_BITMAP *botaoSavegame = NULL;
 ALLEGRO_BITMAP *botaoSavegame2 = NULL;
+ALLEGRO_BITMAP *botaoNovoJogo = NULL;
+ALLEGRO_BITMAP *botaoNovoJogo2 = NULL;
 ALLEGRO_BITMAP *led = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_SAMPLE *som_botao = NULL;
@@ -90,6 +92,7 @@ int noBotaoFecharAnterior;
 int noBotaoLabsAnterior;
 int noBotaoSateliteAnterior;
 int noBotaoSavegameAnterior;
+int noBotaoNovoJogoAnterior;
 
 void error_msg(char *text){
 	al_show_native_message_box(NULL,"ERRO",
@@ -98,8 +101,11 @@ void error_msg(char *text){
 }
 
 int novoJogo(){
+
     incrementoPorFrame=0;
     dinheiroPorSegundo=0;
+    dinheiro=0;
+    upgradeMultiplier=1;
     custoDormitorio=custoBaseDormitorio;
     custoEstufa=custoBaseEstufa;
     custoQuimica=custoBaseQuimica;
@@ -112,31 +118,13 @@ int novoJogo(){
     qtdeFisica=0;
     qtdeRobotica=0;
     qtdeNuclear=0;
-    prodDormitorio=prodBaseDormitorio;
-    prodEstufa=prodBaseEstufa;
-    prodQuimica=prodBaseQuimica;
-    prodFisica=prodBaseFisica;
-    prodRobotica=prodBaseRobotica;
-    prodNuclear=prodBaseNuclear;
-    int upgradeVodka=0;
-
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseDormitorio);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseEstufa);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseQuimica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseFisica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseRobotica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoBaseNuclear);
-
-    al_draw_bitmap(backgroundDinheiroPorSegundo, 88, 6, 0);
-    al_draw_textf(fonte, al_map_rgb(153, 229, 80), 256, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiroPorSegundo);
-    al_draw_bitmap(backgroundDinheiro, 263, 6, 0);
-    al_draw_textf(fonte, al_map_rgb(255, 255, 255), LARGURA_TELA - 38, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiro);
+    prodDormitorio=0;
+    prodEstufa=0;
+    prodQuimica=0;
+    prodFisica=0;
+    prodRobotica=0;
+    prodNuclear=0;
+    upgradeVodka=0;
 
     return 0;
 }
@@ -257,6 +245,8 @@ int inicializar(){
     backgroundUpgrade2 = al_load_bitmap("resources/SpriteBotaoUpgrade2.png");
     botaoSavegame = al_load_bitmap("resources/spriteSavegame.png");
     botaoSavegame2 = al_load_bitmap("resources/spriteSavegame2.png");
+    botaoNovoJogo = al_load_bitmap("resources/SpriteBotaoNovojogo.png");
+    botaoNovoJogo2 = al_load_bitmap("resources/SpriteBotaoNovojogo2.png");
     led = al_load_bitmap("resources/SpriteLuzLigada.png");
 
     al_draw_bitmap(background, 0, 0, 0);
@@ -376,6 +366,46 @@ int main(void){
             }else{
                 if(noBotaoSavegameAnterior){
                     al_draw_bitmap(botaoSavegame2, 622, 255, 0);
+                }
+            }
+
+            if (evento.mouse.x >= red_x*608 &&  //bot�o para clicar no novojogo
+                evento.mouse.x <= red_x*631 &&
+                evento.mouse.y <= red_y*314 &&
+                evento.mouse.y >= red_y*291) {
+
+                noBotaoNovoJogoAnterior = 1;
+                al_draw_bitmap(botaoNovoJogo , 608, 280, 0);
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    int iniciarNovoJogo = al_show_native_message_box(
+                        janela,
+                        "Você clicou em novo jogo!",
+                        "Previet Camarada",
+                        "Tem certeza que quer nos abandonar? "
+                        "Ficaremos a mercê do esquecimento eterno, "
+                        "ou pior, dos capitalistas! "
+                        "Escolha com sabedoria.",
+                        NULL,
+                        ALLEGRO_MESSAGEBOX_YES_NO
+                        );
+                    if (iniciarNovoJogo){
+                        al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        novoJogo();
+                        al_destroy_sample(som_botao);
+                        al_destroy_audio_stream(musica);
+                        al_destroy_timer(timer);
+                        al_destroy_font(fonte);
+                        al_destroy_display(janela);
+                        al_destroy_event_queue(filaEventos);
+                        al_destroy_event_queue(filaEventosTimer);
+                        inicializar();
+                    }
+
+                }
+            }else{
+                if(noBotaoNovoJogoAnterior){
+                    al_draw_bitmap(botaoNovoJogo2, 608, 280, 0);
                 }
             }
 
