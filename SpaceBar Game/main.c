@@ -225,8 +225,8 @@ int inicializar(){
     backgroundLabs = al_load_bitmap("resources/SpriteBackgroundLabs.png");
     backgroundDinheiroPorSegundo = al_load_bitmap("resources/SpriteBackgroundDinheiroPorSegundo.png");
     backgroundMonitor = al_load_bitmap("resources/SpriteBackgroundMonitor.png");
-    backgroundUpgrade = al_load_bitmap("resources/SpriteBotaoUpgrade.png");
-    backgroundUpgrade2 = al_load_bitmap("resources/SpriteBotaoUpgrade2.png");
+    backgroundUpgrade = al_load_bitmap("resources/SpriteUpgradeVodka.png");
+    backgroundUpgrade2 = al_load_bitmap("resources/SpriteUpgradeVodka2.png");
     botaoSavegame = al_load_bitmap("resources/spriteSavegame.png");
     botaoSavegame2 = al_load_bitmap("resources/spriteSavegame2.png");
     botaoNovoJogo = al_load_bitmap("resources/SpriteBotaoNovojogo.png");
