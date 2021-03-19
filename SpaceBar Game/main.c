@@ -30,29 +30,43 @@
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
 
+int sair = 0;
+int fecharMenu = 0;
+
 double dinheiro = 0;
 double custoBaseDormitorio = 10;
-double prodBaseDormitorio = 0.4;
+double prodBaseDormitorio = 1;
 double taxaCrescimentoDormitorio = 1.07;
-double custoBaseEstufa = 420;
+double custoBaseEstufa = 60;
 double prodBaseEstufa = 10;
 double taxaCrescimentoEstufa = 1.15;
-double custoBaseQuimica = 1926;
-double prodBaseQuimica = 180;
+double custoBaseQuimica = 720;
+double prodBaseQuimica = 50;
 double taxaCrescimentoQuimica = 1.14;
-double custoBaseFisica = 314159;
-double prodBaseFisica = 3600;
+double custoBaseFisica = 8640;
+double prodBaseFisica = 300;
 double taxaCrescimentoFisica = 1.13;
-double custoBaseRobotica = 1000101;
-double prodBaseRobotica = 21600;
+double custoBaseRobotica = 103680;
+double prodBaseRobotica = 2000;
 double taxaCrescimentoRobotica = 1.12;
-double custoBaseNuclear = 713000000;
-double prodBaseNuclear = 10000;
+double custoBaseNuclear = 1300000;
+double prodBaseNuclear = 15000;
 double taxaCrescimentoNuclear = 1.10;
 
-double custoUpgradeVodka = 250000;
+double custoUpgradeDormitorio = 1;
+double custoUpgradeEstufa = 2;
+double custoUpgradeQuimica = 3;
+double custoUpgradeFisica = 4;
+double custoUpgradeRobotica = 5;
+double custoUpgradeNuclear = 6;
+double custoUpgradeFinal = 7;
 
-double upgradeMultiplier = 1; //novo jogo - n�vel 0
+double upgradeMultiplierDormitorio = 1; //novo jogo - n�vel 0
+double upgradeMultiplierEstufa = 1;
+double upgradeMultiplierQuimica = 1;
+double upgradeMultiplierFisica = 1;
+double upgradeMultiplierRobotica = 1;
+double upgradeMultiplierNuclear = 1;
 
 float red_x;
 float red_y;
@@ -61,7 +75,7 @@ double incrementoPorFrame, dinheiroPorSegundo, custo, prod;
 double custoDormitorio, custoEstufa, custoQuimica, custoFisica, custoRobotica, custoNuclear;
 double qtdeDormitorio, qtdeEstufa, qtdeQuimica, qtdeFisica, qtdeRobotica, qtdeNuclear;
 double prodDormitorio, prodEstufa, prodQuimica, prodFisica, prodRobotica, prodNuclear;
-int upgradeVodka;
+int upgradeDormitorio, upgradeEstufa, upgradeQuimica, upgradeFisica, upgradeRobotica, upgradeNuclear, upgradeFinal;
 
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *filaEventos = NULL;
@@ -69,6 +83,7 @@ ALLEGRO_EVENT_QUEUE *filaEventosTimer = NULL;
 ALLEGRO_FONT *fonte = NULL;
 ALLEGRO_FONT *fonteMenor = NULL;
 ALLEGRO_BITMAP *backgroundInterface = NULL;
+ALLEGRO_BITMAP *backgroundMenu = NULL;
 ALLEGRO_BITMAP *botaoFechar = NULL;
 ALLEGRO_BITMAP *botaoFechar2 = NULL;
 ALLEGRO_BITMAP *botaoLabs = NULL;
@@ -77,8 +92,20 @@ ALLEGRO_BITMAP *backgroundDinheiro = NULL;
 ALLEGRO_BITMAP *backgroundLabs = NULL;
 ALLEGRO_BITMAP *backgroundDinheiroPorSegundo = NULL;
 ALLEGRO_BITMAP *backgroundMonitor = NULL;
-ALLEGRO_BITMAP *botaoUpgradeVodka = NULL;
-ALLEGRO_BITMAP *botaoUpgradeVodka2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeDormitorio = NULL;
+ALLEGRO_BITMAP *botaoUpgradeDormitorio2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeEstufa = NULL;
+ALLEGRO_BITMAP *botaoUpgradeEstufa2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeQuimica = NULL;
+ALLEGRO_BITMAP *botaoUpgradeQuimica2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeFisica = NULL;
+ALLEGRO_BITMAP *botaoUpgradeFisica2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeRobotica = NULL;
+ALLEGRO_BITMAP *botaoUpgradeRobotica2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeNuclear = NULL;
+ALLEGRO_BITMAP *botaoUpgradeNuclear2 = NULL;
+ALLEGRO_BITMAP *botaoUpgradeFinal = NULL;
+ALLEGRO_BITMAP *botaoUpgradeFinal2 = NULL;
 ALLEGRO_BITMAP *botaoSavegame = NULL;
 ALLEGRO_BITMAP *botaoSavegame2 = NULL;
 ALLEGRO_BITMAP *botaoNovoJogo = NULL;
@@ -90,9 +117,26 @@ ALLEGRO_BITMAP *labQuimica = NULL;
 ALLEGRO_BITMAP *labFisica = NULL;
 ALLEGRO_BITMAP *labRobotica = NULL;
 ALLEGRO_BITMAP *labNuclear = NULL;
+ALLEGRO_BITMAP *labDormitorioUpgrade = NULL;
+ALLEGRO_BITMAP *labEstufaUpgrade = NULL;
+ALLEGRO_BITMAP *labQuimicaUpgrade = NULL;
+ALLEGRO_BITMAP *labFisicaUpgrade = NULL;
+ALLEGRO_BITMAP *labRoboticaUpgrade = NULL;
+ALLEGRO_BITMAP *labNuclearUpgrade = NULL;
 ALLEGRO_BITMAP *satelite = NULL;
 ALLEGRO_BITMAP *satelite2 = NULL;
 ALLEGRO_BITMAP *led = NULL;
+ALLEGRO_BITMAP *botaoMenuNovojogo = NULL;
+ALLEGRO_BITMAP *botaoMenuNovojogo2 = NULL;
+ALLEGRO_BITMAP *botaoMenu1Jogador = NULL;
+ALLEGRO_BITMAP *botaoMenu2Jogador = NULL;
+ALLEGRO_BITMAP *botaoMenuJogador2 = NULL;
+ALLEGRO_BITMAP *botaoMenuContinuar = NULL;
+ALLEGRO_BITMAP *botaoMenuContinuar2 = NULL;
+ALLEGRO_BITMAP *botaoMenuTutorial = NULL;
+ALLEGRO_BITMAP *botaoMenuTutorial2 = NULL;
+ALLEGRO_BITMAP *botaoMenuSair = NULL;
+ALLEGRO_BITMAP *botaoMenuSair2 = NULL;
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_SAMPLE *som_botao = NULL;
 ALLEGRO_SAMPLE *som_semDinheiro = NULL;
@@ -101,11 +145,7 @@ ALLEGRO_AUDIO_STREAM *musica = NULL;
 
 FILE *save;
 
-int noBotaoFecharAnterior;
-int noBotaoLabsAnterior;
-int noBotaoSateliteAnterior;
-int noBotaoSavegameAnterior;
-int noBotaoNovoJogoAnterior;
+int novoJogo, noBotaoFecharAnterior, noBotaoLabsAnterior, noBotaoSateliteAnterior, noBotaoSavegameAnterior, noBotaoNovoJogoAnterior, noBotaoAnteriorUD, noBotaoAnteriorUE, noBotaoAnteriorUQ, noBotaoAnteriorUF, noBotaoAnteriorUR, noBotaoAnteriorUN, noBotaoAnteriorUO;
 
 void error_msg(char *text){
 	al_show_native_message_box(NULL,"ERRO",
@@ -121,6 +161,290 @@ double custo_calculo(double custoBase, double qtde, double taxaCrescimento){
 double prod_calculo(double prodBase, double qtde, double multiplier){
     prod = (prodBase*qtde)*multiplier;
     return prod;
+}
+
+int saveGame(double d,
+             double uMD,
+             double uME,
+             double uMQ,
+             double uMF,
+             double uMR,
+             double uMN,
+             double qD,
+             double qE,
+             double qQ,
+             double qF,
+             double qR,
+             double qN,
+             int uD,
+             int uE,
+             int uQ,
+             int uF,
+             int uR,
+             int uN,
+             int uO){
+
+    save = fopen("save.txt","w");
+    fprintf(save,"%.2f\n",d);
+    fprintf(save,"%.2f\n",uMD);
+    fprintf(save,"%.2f\n",uME);
+    fprintf(save,"%.2f\n",uMQ);
+    fprintf(save,"%.2f\n",uMF);
+    fprintf(save,"%.2f\n",uMR);
+    fprintf(save,"%.2f\n",uMN);
+    fprintf(save,"%.2f\n",qD);
+    fprintf(save,"%.2f\n",qE);
+    fprintf(save,"%.2f\n",qQ);
+    fprintf(save,"%.2f\n",qF);
+    fprintf(save,"%.2f\n",qR);
+    fprintf(save,"%.2f\n",qN);
+    fprintf(save,"%d\n",uD);
+    fprintf(save,"%d\n",uE);
+    fprintf(save,"%d\n",uQ);
+    fprintf(save,"%d\n",uF);
+    fprintf(save,"%d\n",uR);
+    fprintf(save,"%d\n",uN);
+    fprintf(save,"%d\n",uO);
+    fclose(save);
+
+    return 0;
+
+}
+
+int interface_game(){
+
+    double dadosSave[20], dado;
+    save = fopen("save.txt","r");
+    for(int i=0;i<20;i++){
+        fscanf(save,"%lf",&dado);
+        dadosSave[i] = dado;
+    }
+    fclose(save);
+
+    dinheiro = dadosSave[0];
+    upgradeMultiplierDormitorio = dadosSave[1];
+    upgradeMultiplierEstufa = dadosSave[2];
+    upgradeMultiplierQuimica = dadosSave[3];
+    upgradeMultiplierFisica = dadosSave[4];
+    upgradeMultiplierRobotica = dadosSave[5];
+    upgradeMultiplierNuclear = dadosSave[6];
+    qtdeDormitorio = dadosSave[7];
+    qtdeEstufa = dadosSave[8];
+    qtdeQuimica= dadosSave[9];
+    qtdeFisica= dadosSave[10];
+    qtdeRobotica= dadosSave[11];
+    qtdeNuclear= dadosSave[12];
+    upgradeDormitorio= dadosSave[13];
+    upgradeEstufa= dadosSave[14];
+    upgradeQuimica= dadosSave[15];
+    upgradeFisica= dadosSave[16];
+    upgradeRobotica= dadosSave[17];
+    upgradeNuclear= dadosSave[18];
+    upgradeFinal= dadosSave[19];
+    prodDormitorio = prod_calculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplierDormitorio);
+    prodEstufa = prod_calculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplierEstufa);
+    prodQuimica = prod_calculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplierQuimica);
+    prodFisica = prod_calculo(prodBaseFisica, qtdeFisica, upgradeMultiplierFisica);
+    prodRobotica = prod_calculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplierRobotica);
+    prodNuclear = prod_calculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplierNuclear);
+    custoDormitorio = custo_calculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
+    custoEstufa = custo_calculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
+    custoQuimica = custo_calculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
+    custoFisica = custo_calculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
+    custoRobotica = custo_calculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
+    custoNuclear = custo_calculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
+
+    al_draw_bitmap(backgroundInterface, 0, 0, 0);
+    al_draw_bitmap(labInicial, 259, 32, 0);
+
+    if(upgradeDormitorio){
+        al_draw_bitmap(led, 555, 50, 0);
+    }
+    if(upgradeEstufa){
+        al_draw_bitmap(led, 555, 77, 0);
+    }
+    if(upgradeQuimica){
+        al_draw_bitmap(led, 555, 104, 0);
+    }
+    if(upgradeFisica){
+        al_draw_bitmap(led, 555, 131, 0);
+    }
+    if(upgradeRobotica){
+        al_draw_bitmap(led, 555, 158, 0);
+    }
+    if(upgradeNuclear){
+        al_draw_bitmap(led, 555, 185, 0);
+    }
+    if(upgradeFinal){
+        al_draw_bitmap(led, 555, 212, 0);
+    }
+
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoEstufa);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
+    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
+
+    if(qtdeDormitorio>0){
+        al_draw_bitmap(labDormitorio, 280, 36, 0);
+    }
+    if(qtdeEstufa>0){
+        al_draw_bitmap(labEstufa, 6, 139, 0);
+    }
+    if(qtdeQuimica>0){
+        al_draw_bitmap(labQuimica, 119, 41, 0);
+    }
+    if(qtdeFisica>0){
+        al_draw_bitmap(labFisica, 8, 41, 0);
+    }
+    if(qtdeRobotica>0){
+        al_draw_bitmap(labRobotica, 204, 148, 0);
+    }
+    if(qtdeNuclear>0){
+        al_draw_bitmap(labNuclear, 349, 131, 0);
+    }
+
+    al_flip_display();
+
+    return 1;
+}
+
+int interface_menu(){
+    al_draw_bitmap(backgroundMenu, 0, 0, 0);
+
+    while(!fecharMenu){
+
+        al_flip_display();
+
+        while(!al_is_event_queue_empty(filaEventos)){ //eventos de mouse
+            ALLEGRO_EVENT evento;
+            al_wait_for_event(filaEventos, &evento);
+
+            if(novoJogo){
+                if (evento.mouse.x >= red_x*209 &&  //bot�o menu 1 jogador
+                    evento.mouse.x <= red_x*319 &&
+                    evento.mouse.y <= red_y*158 &&
+                    evento.mouse.y >= red_y*141) {
+
+                    al_draw_bitmap(botaoMenu1Jogador, 209, 141, 0);
+                    noBotaoFecharAnterior = 1;
+
+                    if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                        al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        noBotaoFecharAnterior = 1;
+                        saveGame(0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0);
+                        novoJogo=0;
+                        fecharMenu=1;
+                    }
+                }else{
+                    if (evento.mouse.x >= red_x*324 &&  //bot�o menu 2 jogador
+                        evento.mouse.x <= red_x*460 &&
+                        evento.mouse.y <= red_y*158 &&
+                        evento.mouse.y >= red_y*141) {
+
+                        al_draw_bitmap(botaoMenu2Jogador, 209, 141, 0);
+                        noBotaoFecharAnterior = 1;
+
+                        if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                            al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                            noBotaoFecharAnterior = 1;
+                            al_show_native_message_box(janela, "Você não possui a DLC Ultimate Multiplayer!","Conteúdo bloqueado por DLC Paga.","Compre a DLC Ultimate Multiplayer, por 1999 suaves prestações de 17 centavos!",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                            al_draw_bitmap(backgroundMenu, 0, 0, 0);
+                            novoJogo=0;
+                        }
+                    }else{
+                        if(noBotaoFecharAnterior){
+                        al_draw_bitmap(botaoMenuJogador2, 209, 141, 0);
+                        }
+                    }
+                }
+
+            }else{
+            if (evento.mouse.x >= red_x*241 &&  //bot�o menu novo jogo
+                evento.mouse.x <= red_x*399 &&
+                evento.mouse.y <= red_y*158 &&
+                evento.mouse.y >= red_y*141) {
+
+                al_draw_bitmap(botaoMenuNovojogo, 241, 141, 0);
+                noBotaoFecharAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                    noBotaoFecharAnterior = 1;
+                    al_draw_bitmap(botaoMenuJogador2,209,141,0);
+                    novoJogo=1;
+                }
+            }else{
+                if(noBotaoFecharAnterior){
+                    al_draw_bitmap(botaoMenuNovojogo2, 241, 141, 0);
+                }
+            }
+            }
+
+            if (evento.mouse.x >= red_x*238 &&  //bot�o menu continuar
+                evento.mouse.x <= red_x*402 &&
+                evento.mouse.y <= red_y*188 &&
+                evento.mouse.y >= red_y*171) {
+
+                al_draw_bitmap(botaoMenuContinuar, 238, 171, 0);
+                noBotaoFecharAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                    noBotaoFecharAnterior = 1;
+                    fecharMenu=1;
+                }
+            }else{
+                if(noBotaoFecharAnterior){
+                    al_draw_bitmap(botaoMenuContinuar2, 238, 171, 0);
+                }
+            }
+
+            if (evento.mouse.x >= red_x*248 &&  //bot�o menu tutorial
+                evento.mouse.x <= red_x*391 &&
+                evento.mouse.y <= red_y*218 &&
+                evento.mouse.y >= red_y*201) {
+
+                al_draw_bitmap(botaoMenuTutorial, 248, 201, 0);
+                noBotaoFecharAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                }
+            }else{
+                if(noBotaoFecharAnterior){
+                    al_draw_bitmap(botaoMenuTutorial2, 248, 201, 0);
+                }
+            }
+
+            if (evento.mouse.x >= red_x*287 &&  //bot�o para sair
+                evento.mouse.x <= red_x*352 &&
+                evento.mouse.y <= red_y*248 &&
+                evento.mouse.y >= red_y*231) {
+
+                al_draw_bitmap(botaoMenuSair, 287, 231, 0);
+                noBotaoFecharAnterior = 1;
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                sair = 1;
+                fecharMenu = 1;
+                }
+            }else{
+                if(noBotaoFecharAnterior){
+                    al_draw_bitmap(botaoMenuSair2, 287, 231, 0);
+                }
+            }
+
+        }
+    }
+    return 1;
 }
 
 int inicializar(){
@@ -235,35 +559,6 @@ int inicializar(){
 
     al_set_window_title(janela, "Ultimate Restless Space Station - Feito por Enzo Filippo Centenaro e Vitor Mateus Romancini");
 
-    backgroundInterface = al_load_bitmap("assets/background_interface.png");
-    botaoFechar = al_load_bitmap("assets/sprite_botao_fechar.png");
-    botaoFechar2 = al_load_bitmap("assets/sprite_botao_fechar_2.png");
-    botaoLabs = al_load_bitmap("assets/sprite_botao_labs.png");
-    botaoLabs2 = al_load_bitmap("assets/sprite_botao_labs_2.png");
-    backgroundDinheiro = al_load_bitmap("assets/background_dinheiro.png");
-    backgroundLabs = al_load_bitmap("assets/background_lab.png");
-    backgroundDinheiroPorSegundo = al_load_bitmap("assets/background_dinheiroporsegundo.png");
-    backgroundMonitor = al_load_bitmap("assets/background_monitor.png");
-    botaoUpgradeVodka = al_load_bitmap("assets/sprite_upgrade_vodka.png");
-    botaoUpgradeVodka2 = al_load_bitmap("assets/sprite_upgrade_vodka_2.png");
-    botaoSavegame = al_load_bitmap("assets/sprite_botao_savegame.png");
-    botaoSavegame2 = al_load_bitmap("assets/sprite_botao_savegame_2.png");
-    botaoNovoJogo = al_load_bitmap("assets/sprite_botao_novojogo.png");
-    botaoNovoJogo2 = al_load_bitmap("assets/sprite_botao_novojogo_2.png");
-    led = al_load_bitmap("assets/sprite_luz_ligada.png");
-    labInicial = al_load_bitmap("assets/lab_inicial.png");
-    labDormitorio = al_load_bitmap("assets/lab_dormitorio.png");
-    labEstufa = al_load_bitmap("assets/lab_estufa.png");
-    labQuimica = al_load_bitmap("assets/lab_quimica.png");
-    labFisica = al_load_bitmap("assets/lab_fisica.png");
-    labRobotica = al_load_bitmap("assets/lab_robotica.png");
-    labNuclear = al_load_bitmap("assets/lab_nuclear.png");
-    satelite = al_load_bitmap("assets/sprite_satelite.png");
-    satelite2 = al_load_bitmap("assets/sprite_satelite_2.png");
-
-    al_draw_bitmap(backgroundInterface, 0, 0, 0);
-    al_draw_bitmap(labInicial, 259, 32, 0);
-
     fonte = al_load_font("assets/gamer.ttf", 32, 0);
     if (!fonte){
         error_msg("Falha ao carregar \"assets/gamer.ttf\"");
@@ -290,107 +585,83 @@ int inicializar(){
         return 0;
     }
 
-    double dadosSave[9], dado;
-    save = fopen("save.txt","r");
-    for(int i=0;i<9;i++){
-        fscanf(save,"%lf",&dado);
-        dadosSave[i] = dado;
-    }
-    fclose(save);
-
-    dinheiro = dadosSave[0];
-    upgradeMultiplier = dadosSave[1];
-    qtdeDormitorio = dadosSave[2];
-    qtdeEstufa = dadosSave[3];
-    qtdeQuimica= dadosSave[4];
-    qtdeFisica= dadosSave[5];
-    qtdeRobotica= dadosSave[6];
-    qtdeNuclear= dadosSave[7];
-    upgradeVodka= dadosSave[8];
-    prodDormitorio = prod_calculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
-    prodEstufa = prod_calculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplier);
-    prodQuimica = prod_calculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplier);
-    prodFisica = prod_calculo(prodBaseFisica, qtdeFisica, upgradeMultiplier);
-    prodRobotica = prod_calculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplier);
-    prodNuclear = prod_calculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplier);
-    custoDormitorio = custo_calculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
-    custoEstufa = custo_calculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
-    custoQuimica = custo_calculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
-    custoFisica = custo_calculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
-    custoRobotica = custo_calculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
-    custoNuclear = custo_calculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
-
-    if(upgradeVodka){
-        al_draw_bitmap(led, 555, 50, 0);
-    }
+    backgroundInterface = al_load_bitmap("assets/background_interface.png");
+    backgroundMenu = al_load_bitmap("assets/background_menu.png");
+    botaoFechar = al_load_bitmap("assets/sprite_botao_fechar.png");
+    botaoFechar2 = al_load_bitmap("assets/sprite_botao_fechar_2.png");
+    botaoLabs = al_load_bitmap("assets/sprite_botao_labs.png");
+    botaoLabs2 = al_load_bitmap("assets/sprite_botao_labs_2.png");
+    backgroundDinheiro = al_load_bitmap("assets/background_dinheiro.png");
+    backgroundLabs = al_load_bitmap("assets/background_lab.png");
+    backgroundDinheiroPorSegundo = al_load_bitmap("assets/background_dinheiroporsegundo.png");
+    backgroundMonitor = al_load_bitmap("assets/background_monitor.png");
+    botaoUpgradeDormitorio = al_load_bitmap("assets/sprite_upgrade_dormitorio.png");
+    botaoUpgradeDormitorio2 = al_load_bitmap("assets/sprite_upgrade_dormitorio_2.png");
+    botaoUpgradeEstufa = al_load_bitmap("assets/sprite_upgrade_estufa.png");
+    botaoUpgradeEstufa2 = al_load_bitmap("assets/sprite_upgrade_estufa_2.png");
+    botaoUpgradeQuimica = al_load_bitmap("assets/sprite_upgrade_quimica.png");
+    botaoUpgradeQuimica2 = al_load_bitmap("assets/sprite_upgrade_quimica_2.png");
+    botaoUpgradeFisica = al_load_bitmap("assets/sprite_upgrade_fisica.png");
+    botaoUpgradeFisica2 = al_load_bitmap("assets/sprite_upgrade_fisica_2.png");
+    botaoUpgradeRobotica = al_load_bitmap("assets/sprite_upgrade_robotica.png");
+    botaoUpgradeRobotica2 = al_load_bitmap("assets/sprite_upgrade_robotica_2.png");
+    botaoUpgradeNuclear = al_load_bitmap("assets/sprite_upgrade_nuclear.png");
+    botaoUpgradeNuclear2 = al_load_bitmap("assets/sprite_upgrade_nuclear_2.png");
+    botaoUpgradeFinal = al_load_bitmap("assets/sprite_upgrade_final.png");
+    botaoUpgradeFinal2 = al_load_bitmap("assets/sprite_upgrade_final_2.png");
+    botaoSavegame = al_load_bitmap("assets/sprite_botao_savegame.png");
+    botaoSavegame2 = al_load_bitmap("assets/sprite_botao_savegame_2.png");
+    botaoNovoJogo = al_load_bitmap("assets/sprite_botao_novojogo.png");
+    botaoNovoJogo2 = al_load_bitmap("assets/sprite_botao_novojogo_2.png");
+    led = al_load_bitmap("assets/sprite_luz_ligada.png");
+    labInicial = al_load_bitmap("assets/lab_inicial.png");
+    labDormitorio = al_load_bitmap("assets/lab_dormitorio.png");
+    labEstufa = al_load_bitmap("assets/lab_estufa.png");
+    labQuimica = al_load_bitmap("assets/lab_quimica.png");
+    labFisica = al_load_bitmap("assets/lab_fisica.png");
+    labRobotica = al_load_bitmap("assets/lab_robotica.png");
+    labNuclear = al_load_bitmap("assets/lab_nuclear.png");
+    labDormitorioUpgrade = al_load_bitmap("assets/lab_dormitorio_upgrade.png");
+    labEstufaUpgrade = al_load_bitmap("assets/lab_estufa_upgrade.png");
+    labQuimicaUpgrade = al_load_bitmap("assets/lab_quimica_upgrade.png");
+    labFisicaUpgrade = al_load_bitmap("assets/lab_fisica_upgrade.png");
+    labRoboticaUpgrade = al_load_bitmap("assets/lab_robotica_upgrade.png");
+    labNuclearUpgrade = al_load_bitmap("assets/lab_nuclear_upgrade.png");
+    satelite = al_load_bitmap("assets/sprite_satelite.png");
+    satelite2 = al_load_bitmap("assets/sprite_satelite_2.png");
+    botaoMenuNovojogo = al_load_bitmap("assets/sprite_botao_menu_novojogo.png");
+    botaoMenuNovojogo2 = al_load_bitmap("assets/sprite_botao_menu_novojogo_2.png");
+    botaoMenuContinuar = al_load_bitmap("assets/sprite_botao_menu_continuar.png");
+    botaoMenu1Jogador = al_load_bitmap("assets/sprite_botao_menu_1jogador.png");
+    botaoMenu2Jogador = al_load_bitmap("assets/sprite_botao_menu_2jogador.png");
+    botaoMenuJogador2 = al_load_bitmap("assets/sprite_botao_menu_jogador_2.png");
+    botaoMenuContinuar2 = al_load_bitmap("assets/sprite_botao_menu_continuar_2.png");
+    botaoMenuTutorial = al_load_bitmap("assets/sprite_botao_menu_tutorial.png");
+    botaoMenuTutorial2 = al_load_bitmap("assets/sprite_botao_menu_tutorial_2.png");
+    botaoMenuSair = al_load_bitmap("assets/sprite_botao_menu_sair.png");
+    botaoMenuSair2 = al_load_bitmap("assets/sprite_botao_menu_sair_2.png");
 
     al_register_event_source(filaEventos, al_get_keyboard_event_source());
     al_register_event_source(filaEventos, al_get_display_event_source(janela));
     al_register_event_source(filaEventos, al_get_mouse_event_source());
     al_register_event_source(filaEventosTimer, al_get_timer_event_source(timer));
 
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoDormitorio);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoEstufa);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
-    al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
-
-    if(qtdeDormitorio>0){
-        al_draw_bitmap(labDormitorio, 280, 36, 0);
-    }
-    if(qtdeEstufa>0){
-        al_draw_bitmap(labEstufa, 6, 139, 0);
-    }
-    if(qtdeQuimica>0){
-        al_draw_bitmap(labQuimica, 119, 41, 0);
-    }
-    if(qtdeFisica>0){
-        al_draw_bitmap(labFisica, 8, 41, 0);
-    }
-    if(qtdeRobotica>0){
-        al_draw_bitmap(labRobotica, 204, 148, 0);
-    }
-    if(qtdeNuclear>0){
-        al_draw_bitmap(labNuclear, 349, 131, 0);
-    }
-
-    al_flip_display();
-
     al_start_timer(timer);
 
     return 1;
 }
 
-int saveGame(double d,double uM,double qD,double qE,double qQ,double qF,double qR,double qN,int uV){
-
-    save = fopen("save.txt","w");
-    fprintf(save,"%.2f\n",d);
-    fprintf(save,"%.2f\n",uM);
-    fprintf(save,"%.2f\n",qD);
-    fprintf(save,"%.2f\n",qE);
-    fprintf(save,"%.2f\n",qQ);
-    fprintf(save,"%.2f\n",qF);
-    fprintf(save,"%.2f\n",qR);
-    fprintf(save,"%.2f\n",qN);
-    fprintf(save,"%d\n",uV);
-    fclose(save);
-
-    return 0;
-
-}
-
 int main(void){
 
-    int sair = 0;
+    if(!inicializar()){
+        return -1;
+    }
 
-    if (!inicializar()){
+    if(!interface_menu()){
+        return -1;
+    }
+
+    if(!interface_game()){
         return -1;
     }
 
@@ -435,7 +706,26 @@ int main(void){
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
-                    saveGame(dinheiro,upgradeMultiplier,qtdeDormitorio,qtdeEstufa,qtdeQuimica,qtdeFisica,qtdeRobotica,qtdeNuclear,upgradeVodka);
+                    saveGame(dinheiro,
+                             upgradeMultiplierDormitorio,
+                             upgradeMultiplierEstufa,
+                             upgradeMultiplierQuimica,
+                             upgradeMultiplierFisica,
+                             upgradeMultiplierRobotica,
+                             upgradeMultiplierNuclear,
+                             qtdeDormitorio,
+                             qtdeEstufa,
+                             qtdeQuimica,
+                             qtdeFisica,
+                             qtdeRobotica,
+                             qtdeNuclear,
+                             upgradeDormitorio,
+                             upgradeEstufa,
+                             upgradeQuimica,
+                             upgradeFisica,
+                             upgradeRobotica,
+                             upgradeNuclear,
+                             upgradeFinal);
                 }
             }else{
                 if(noBotaoSavegameAnterior){
@@ -465,7 +755,7 @@ int main(void){
                         );
                     if (iniciarNovoJogo){
                         al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
-                        saveGame(0,1,0,0,0,0,0,0,0);
+                        saveGame(0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0);
                         al_destroy_sample(som_botao);
                         al_destroy_audio_stream(musica);
                         al_destroy_timer(timer);
@@ -474,6 +764,7 @@ int main(void){
                         al_destroy_event_queue(filaEventos);
                         al_destroy_event_queue(filaEventosTimer);
                         inicializar();
+                        interface_game();
                     }
 
                 }
@@ -493,7 +784,7 @@ int main(void){
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     al_play_sample(som_satelite, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                     al_draw_bitmap(satelite, 263, 128, 0);
-                    dinheiro += upgradeMultiplier;
+                    dinheiro += (upgradeMultiplierDormitorio*upgradeMultiplierEstufa*upgradeMultiplierQuimica*upgradeMultiplierFisica*upgradeMultiplierRobotica*upgradeMultiplierNuclear);
                     al_draw_bitmap(backgroundDinheiro, 263, 6, 0);
                     al_draw_textf(fonte, al_map_rgb(255, 255, 255), LARGURA_TELA - 38, 0, ALLEGRO_ALIGN_RIGHT, "%.2f", dinheiro);
 
@@ -525,7 +816,7 @@ int main(void){
                             al_draw_bitmap(labDormitorio, 280, 36, 0);
                         }
                         dinheiro -= custoDormitorio;
-                        prodDormitorio = prod_calculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
+                        prodDormitorio = prod_calculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplierDormitorio);
                         al_draw_bitmap(backgroundLabs, 53, 279, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 277, ALLEGRO_ALIGN_LEFT, "DORMITORIO: %.0f", qtdeDormitorio);
                         custoDormitorio = custo_calculo(custoBaseDormitorio, qtdeDormitorio, taxaCrescimentoDormitorio);
@@ -566,7 +857,7 @@ int main(void){
                             al_draw_bitmap(labEstufa, 6, 139, 0);
                         }
                         dinheiro -= custoEstufa;
-                        prodEstufa = prod_calculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplier);
+                        prodEstufa = prod_calculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplierEstufa);
                         al_draw_bitmap(backgroundLabs, 53, 307, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 305, ALLEGRO_ALIGN_LEFT, "ESTUFA: %.0f", qtdeEstufa);
                         custoEstufa = custo_calculo(custoBaseEstufa, qtdeEstufa, taxaCrescimentoEstufa);
@@ -607,7 +898,7 @@ int main(void){
                             al_draw_bitmap(labQuimica, 119, 41, 0);
                         }
                         dinheiro -= custoQuimica;
-                        prodQuimica = prod_calculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplier);
+                        prodQuimica = prod_calculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplierQuimica);
                         al_draw_bitmap(backgroundLabs, 53, 335, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 333, ALLEGRO_ALIGN_LEFT, "QUIMICA: %.0f", qtdeQuimica);
                         custoQuimica = custo_calculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
@@ -647,7 +938,7 @@ int main(void){
                             al_draw_bitmap(labFisica, 8, 41, 0);
                         }
                         dinheiro -= custoFisica;
-                        prodFisica = prod_calculo(prodBaseFisica, qtdeFisica, upgradeMultiplier);
+                        prodFisica = prod_calculo(prodBaseFisica, qtdeFisica, upgradeMultiplierFisica);
                         al_draw_bitmap(backgroundLabs, 216, 279, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 277, ALLEGRO_ALIGN_LEFT, "FISICA: %.0f", qtdeFisica);
                         custoFisica = custo_calculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
@@ -688,7 +979,7 @@ int main(void){
                             al_draw_bitmap(labRobotica, 204, 148, 0);
                         }
                         dinheiro -= custoRobotica;
-                        prodRobotica = prod_calculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplier);
+                        prodRobotica = prod_calculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplierRobotica);
                         al_draw_bitmap(backgroundLabs, 216, 307, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 305, ALLEGRO_ALIGN_LEFT, "ROBOTICA: %.0f", qtdeRobotica);
                         custoRobotica = custo_calculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
@@ -728,7 +1019,7 @@ int main(void){
                             al_draw_bitmap(labNuclear, 349, 131, 0);
                         }
                         dinheiro -= custoNuclear;
-                        prodNuclear = prod_calculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplier);
+                        prodNuclear = prod_calculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplierNuclear);
                         al_draw_bitmap(backgroundLabs, 216, 335, 0);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 333, ALLEGRO_ALIGN_LEFT, "NUCLEAR: %.0f", qtdeNuclear);
                         custoNuclear = custo_calculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
@@ -747,45 +1038,257 @@ int main(void){
                 }
             }
 
-            if (evento.mouse.x >= red_x*570 &&  //botão upgrade Vodka
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade dormitorio (Laika)
                 evento.mouse.x <= red_x*637 &&
                 evento.mouse.y <= red_y*75 &&
                 evento.mouse.y >= red_y*50) {
 
-                al_draw_bitmap(botaoUpgradeVodka, 569, 49, 0);
-                noBotaoLabsAnterior = 1;
+                al_draw_bitmap(botaoUpgradeDormitorio, 569, 49, 0);
+                noBotaoAnteriorUD = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
                 al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
                 al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
                 al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                    if(!upgradeVodka){
-                        if(custoUpgradeVodka<=dinheiro){
-                        al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
-                        dinheiro -= custoUpgradeVodka;
-                        upgradeMultiplier = 2;
-                        prodDormitorio = prod_calculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplier);
-                        prodEstufa = prod_calculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplier);
-                        prodQuimica = prod_calculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplier);
-                        prodFisica = prod_calculo(prodBaseFisica, qtdeFisica, upgradeMultiplier);
-                        prodRobotica = prod_calculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplier);
-                        prodNuclear = prod_calculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplier);
-                        al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "a");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "a");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "a");
-                        al_draw_bitmap(led, 553, 50, 0);
-                        upgradeVodka = 1;
+                    if(!upgradeDormitorio){
+                        if(custoUpgradeDormitorio<=dinheiro){
+                            if(qtdeDormitorio>0){
+                                al_show_native_message_box(janela, "LAIKA Upgrade!","Você comprou o Upgrade da LAIKA!","Com sucesso resgatamos a cadela LAIKA, agora temos uma amiguinha, depois de flutuar no espaço ela ficou enorme!",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                                al_draw_bitmap(labDormitorioUpgrade, 280, 36, 0);
+                                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                dinheiro -= custoUpgradeDormitorio;
+                                upgradeMultiplierDormitorio = 2;
+                                prodDormitorio = prod_calculo(prodBaseDormitorio, qtdeDormitorio, upgradeMultiplierDormitorio);
+                                al_draw_bitmap(led, 555, 50, 0);
+                                upgradeDormitorio = 1;
+                            }
                         }else{
                         al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                         }
                     }
                 }
             }else{
-                if(noBotaoLabsAnterior){
-                    al_draw_bitmap(botaoUpgradeVodka2, 569, 49, 0);
-                    noBotaoLabsAnterior=1;
+                if(noBotaoAnteriorUD){
+                    al_draw_bitmap(botaoUpgradeDormitorio2, 569, 49, 0);
+                    noBotaoAnteriorUD=0;
+                }
+            }
+
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade estufa (Espantalho)
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*102 &&
+                evento.mouse.y >= red_y*77) {
+
+                al_draw_bitmap(botaoUpgradeEstufa, 569, 76, 0);
+                noBotaoAnteriorUE = 1;
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    if(!upgradeEstufa){
+                        if(custoUpgradeEstufa<=dinheiro){
+                            if((qtdeEstufa>0)&&(upgradeDormitorio==1)){
+                                al_show_native_message_box(janela, "ESPANTALHO Upgrade!","Você comprou o Upgrade do ESPANTALHO!","Nossas plantações de milho estavam sendo atacadas por corvos espaciais, contratamos um cara parecido com o TRUMP para assustar os pássaros!",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                                al_draw_bitmap(labEstufaUpgrade, 6, 139, 0);
+                                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                dinheiro -= custoUpgradeEstufa;
+                                upgradeMultiplierEstufa = 2;
+                                prodEstufa = prod_calculo(prodBaseEstufa, qtdeEstufa, upgradeMultiplierEstufa);
+                                al_draw_bitmap(led, 555, 77, 0);
+                                upgradeEstufa = 1;
+                            }
+                        }else{
+                        al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        }
+                    }
+                }
+            }else{
+                if(noBotaoAnteriorUE){
+                    al_draw_bitmap(botaoUpgradeEstufa2, 569, 76, 0);
+                    noBotaoAnteriorUE=0;
+                }
+            }
+
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade quimica (Vodka)
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*129 &&
+                evento.mouse.y >= red_y*104) {
+
+                al_draw_bitmap(botaoUpgradeQuimica, 569, 103, 0);
+                noBotaoAnteriorUQ = 1;
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    if(!upgradeQuimica){
+                        if(custoUpgradeQuimica<=dinheiro){
+                            if((qtdeQuimica>0)&&(upgradeDormitorio==1)&&(upgradeEstufa==1)){
+                                al_show_native_message_box(janela, "VODKA Upgrade!","Você comprou o Upgrade da VODKA!","O laboratório de química já tinha suas utilidades, agora ele produz vodka em massa para a estação!",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                                al_draw_bitmap(labQuimicaUpgrade, 119, 41, 0);
+                                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                dinheiro -= custoUpgradeQuimica;
+                                upgradeMultiplierQuimica = 2;
+                                prodQuimica = prod_calculo(prodBaseQuimica, qtdeQuimica, upgradeMultiplierQuimica);
+                                al_draw_bitmap(led, 555, 104, 0);
+                                upgradeQuimica = 1;
+                            }
+                        }else{
+                        al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        }
+                    }
+                }
+            }else{
+                if(noBotaoAnteriorUQ){
+                    al_draw_bitmap(botaoUpgradeQuimica2, 569, 103, 0);
+                    noBotaoAnteriorUQ=0;
+                }
+            }
+
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade fisica (estúdio)
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*156 &&
+                evento.mouse.y >= red_y*131) {
+
+                al_draw_bitmap(botaoUpgradeFisica, 569, 130, 0);
+                noBotaoAnteriorUF = 1;
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    if(!upgradeFisica){
+                        if(custoUpgradeFisica<=dinheiro){
+                            if((qtdeFisica>0)&&(upgradeDormitorio==1)&&(upgradeEstufa==1)&&(upgradeQuimica==1)){
+                                al_show_native_message_box(janela, "ESTÚDIO Upgrade!","Você comprou o Upgrade do Estúdio!","Transformamos o laboratório de física num estúdio, para gravarmos a ida do soviético a lua!",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                                al_draw_bitmap(labFisicaUpgrade, 8, 41, 0);
+                                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                dinheiro -= custoUpgradeFisica;
+                                upgradeMultiplierFisica = 2;
+                                prodFisica = prod_calculo(prodBaseFisica, qtdeFisica, upgradeMultiplierFisica);
+                                al_draw_bitmap(led, 555, 131, 0);
+                                upgradeFisica = 1;
+                            }
+                        }else{
+                        al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        }
+                    }
+                }
+            }else{
+                if(noBotaoAnteriorUF){
+                    al_draw_bitmap(botaoUpgradeFisica2, 569, 130, 0);
+                    noBotaoAnteriorUF = 0;
+                }
+            }
+
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade robotica (zanetti)
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*183 &&
+                evento.mouse.y >= red_y*158) {
+
+                al_draw_bitmap(botaoUpgradeRobotica, 569, 157, 0);
+                noBotaoAnteriorUR = 1;
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    if(!upgradeRobotica){
+                        if(custoUpgradeRobotica<=dinheiro){
+                            if((qtdeRobotica>0)&&(upgradeDormitorio==1)&&(upgradeEstufa==1)&&(upgradeFisica==1)&&(upgradeQuimica==1)){
+                                al_show_native_message_box(janela, "ZANETTI Upgrade!","Você comprou o Upgrade do Zanetti!","A URSS Convidou o professor Zanetti para participar do núcleo de robótica da estação, agora a estação tem o selo Zanetti de qualidade!",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                                al_draw_bitmap(labRoboticaUpgrade, 204, 148, 0);
+                                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                dinheiro -= custoUpgradeRobotica;
+                                upgradeMultiplierRobotica = 2;
+                                prodRobotica = prod_calculo(prodBaseRobotica, qtdeRobotica, upgradeMultiplierRobotica);
+                                al_draw_bitmap(led, 555, 158, 0);
+                                upgradeRobotica = 1;
+                            }
+                        }else{
+                        al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        }
+                    }
+                }
+            }else{
+                if(noBotaoAnteriorUR){
+                    al_draw_bitmap(botaoUpgradeRobotica2, 569, 157, 0);
+                    noBotaoAnteriorUR=0;
+                }
+            }
+
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade nuclear ()
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*210 &&
+                evento.mouse.y >= red_y*185) {
+
+                al_draw_bitmap(botaoUpgradeNuclear, 569, 184, 0);
+                noBotaoAnteriorUN = 1;
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    if(!upgradeNuclear){
+                        if(custoUpgradeNuclear<=dinheiro){
+                            if((qtdeNuclear>0)&&(upgradeDormitorio==1)&&(upgradeEstufa==1)&&(upgradeFisica==1)&&(upgradeQuimica==1)&&(upgradeRobotica==1)){
+                                al_show_native_message_box(janela, "KGB Upgrade!","Você comprou o Upgrade da KGB!","Agora a KGB controla a produção de urânio espacial, e adicionamos uma estátua do glorioso Putin...",NULL,ALLEGRO_MESSAGEBOX_WARN);
+                                al_draw_bitmap(labNuclearUpgrade, 349, 131, 0);
+                                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                dinheiro -= custoUpgradeNuclear;
+                                upgradeMultiplierNuclear = 2;
+                                prodNuclear = prod_calculo(prodBaseNuclear, qtdeNuclear, upgradeMultiplierNuclear);
+                                al_draw_bitmap(led, 555, 185, 0);
+                                upgradeNuclear = 1;
+                            }
+                        }else{
+                        al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        }
+                    }
+                }
+            }else{
+                if(noBotaoAnteriorUN){
+                    al_draw_bitmap(botaoUpgradeNuclear2, 569, 184, 0);
+                    noBotaoAnteriorUN=0;
+                }
+            }
+
+            if (evento.mouse.x >= red_x*570 &&  //botão upgrade final (O final)
+                evento.mouse.x <= red_x*637 &&
+                evento.mouse.y <= red_y*237 &&
+                evento.mouse.y >= red_y*212) {
+
+                al_draw_bitmap(botaoUpgradeFinal, 569, 211, 0);
+                noBotaoAnteriorUO = 1;
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+
+                if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                    if(!upgradeFinal){
+                        if(custoUpgradeFinal<=dinheiro){
+                            if((upgradeNuclear==1)&&(upgradeDormitorio==1)&&(upgradeEstufa==1)&&(upgradeFisica==1)&&(upgradeQuimica==1)&&(upgradeRobotica==1)){
+                                dinheiro -= custoUpgradeFinal;
+                                al_draw_bitmap(led, 555, 212, 0);
+                                upgradeFinal=1;
+                            }
+                        }else{
+                        al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                        }
+                    }
+                }
+            }else{
+                if(noBotaoAnteriorUO){
+                    al_draw_bitmap(botaoUpgradeFinal2, 569, 211, 0);
+                    noBotaoAnteriorUO=0;
                 }
             }
 
