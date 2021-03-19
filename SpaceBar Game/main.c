@@ -53,13 +53,13 @@ double custoBaseNuclear = 1300000;
 double prodBaseNuclear = 15000;
 double taxaCrescimentoNuclear = 1.10;
 
-double custoUpgradeDormitorio = 1;
-double custoUpgradeEstufa = 2;
-double custoUpgradeQuimica = 3;
-double custoUpgradeFisica = 4;
-double custoUpgradeRobotica = 5;
-double custoUpgradeNuclear = 6;
-double custoUpgradeFinal = 7;
+double custoUpgradeDormitorio = 5000;
+double custoUpgradeEstufa = 50000;
+double custoUpgradeQuimica = 500000;
+double custoUpgradeFisica = 5000000;
+double custoUpgradeRobotica = 50000000;
+double custoUpgradeNuclear = 500000000;
+double custoUpgradeFinal = 5000000000;
 
 double upgradeMultiplierDormitorio = 1; //novo jogo - n�vel 0
 double upgradeMultiplierEstufa = 1;
