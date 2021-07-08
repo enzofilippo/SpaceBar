@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define FORMAT_STRING "START Tutorial.pdf"
 #define FPS 11.0
 #define LARGURA_TELA 640
 #define ALTURA_TELA 360
@@ -61,7 +62,7 @@ double custoUpgradeRobotica = 50000000;
 double custoUpgradeNuclear = 500000000;
 double custoUpgradeFinal = 5000000000;
 
-double upgradeMultiplierDormitorio = 1; //novo jogo - n�vel 0
+double upgradeMultiplierDormitorio = 1;
 double upgradeMultiplierEstufa = 1;
 double upgradeMultiplierQuimica = 1;
 double upgradeMultiplierFisica = 1;
@@ -208,7 +209,6 @@ int saveGame(double d,
     fclose(save);
 
     return 0;
-
 }
 
 int interface_game(){
@@ -416,7 +416,12 @@ int interface_menu(){
                 noBotaoFecharAnterior = 1;
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-                al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                    al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                    size_t len = snprintf(NULL, 0, FORMAT_STRING) + 1;
+                    char *cmd = malloc(len*sizeof(char));
+                    snprintf(cmd, len, FORMAT_STRING);
+                    system(cmd);
+                    free(cmd);
                 }
             }else{
                 if(noBotaoFecharAnterior){
@@ -538,8 +543,8 @@ int inicializar(){
         return 0;
     }
 
-    red_x = res_x_comp / (float) LARGURA_TELA;
-	red_y = res_y_comp / (float) ALTURA_TELA;
+    red_x = res_x_comp / (float)LARGURA_TELA;
+	red_y = res_y_comp / (float)ALTURA_TELA;
 	ALLEGRO_TRANSFORM transformar;
 	al_identity_transform(&transformar);
 	al_scale_transform(&transformar, red_x, red_y);
@@ -703,6 +708,10 @@ int main(void){
 
                 noBotaoSavegameAnterior = 1;
                 al_draw_bitmap(botaoSavegame, 622, 255, 0);
+                al_draw_bitmap(backgroundMonitor, 390, 274, 0);
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Clique para salvar o ");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "seu progresso, imagina");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "perder tudo!");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
@@ -842,9 +851,9 @@ int main(void){
                 evento.mouse.y >= red_y*307) {
 
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Estufa em...");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "Quem disse que não dá");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "pra plantar no espaço?");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Pra plantar soja não");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "precisa TCC!!!");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "¯\\_(^_^)_/¯ ");
                 al_draw_bitmap(botaoLabs, 2, 307, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -904,9 +913,9 @@ int main(void){
                         custoQuimica = custo_calculo(custoBaseQuimica, qtdeQuimica, taxaCrescimentoQuimica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 53, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoQuimica);
                         al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Agora sim! Da pra");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "fazer muita vodka");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "para os cientistas");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "O que o álcool disse");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para o outro álcool?");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "Etanóis!!! KKKKKKKKKKKKK");
                     }else{
                         al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                     }
@@ -923,9 +932,9 @@ int main(void){
                 evento.mouse.y >= red_y*279) {
 
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "O que podemos fazer");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "com um lab de física?");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "BOMBAS ESPACIAIS!!!");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Hey camarada, Gagarin");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "precisa de mais espaço");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "para trazer o TANQUE!!");
                 al_draw_bitmap(botaoLabs, 165, 279, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -944,9 +953,9 @@ int main(void){
                         custoFisica = custo_calculo(custoBaseFisica, qtdeFisica, taxaCrescimentoFisica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 287, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoFisica);
                         al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "boa meu camarada");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "mais espaço...Gagarin!!");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "pode trazer o TANQUE!!");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Hey camarada, Gagarin");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "precisa de mais espaço");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "para trazer o TANQUE!!");
                     }
                     else{
                         al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
@@ -964,9 +973,9 @@ int main(void){
                 evento.mouse.y >= red_y*307) {
 
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "o bom dos robôs é");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "que eles fazem tudo");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "vamos é dormir");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Ya! queremos robôs!!!");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "estranho, pq aquele robô");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "está dizendo matar hum...");
                 al_draw_bitmap(botaoLabs, 165, 307, 0);
                 noBotaoLabsAnterior = 1;
 
@@ -985,7 +994,7 @@ int main(void){
                         custoRobotica = custo_calculo(custoBaseRobotica, qtdeRobotica, taxaCrescimentoRobotica);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 315, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoRobotica);
                         al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Ya! mais robôs!!!");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Ya! queremos robôs!!!");
                         al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "estranho, pq aquele robô");
                         al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "está dizendo matar hum...");
                     }else{
@@ -1025,9 +1034,9 @@ int main(void){
                         custoNuclear = custo_calculo(custoBaseNuclear, qtdeNuclear, taxaCrescimentoNuclear);
                         al_draw_textf(fonteMenor, al_map_rgb(55, 68, 89), 216, 343, ALLEGRO_ALIGN_LEFT, "custo: %.2f", custoNuclear);
                         al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Kalashnikov, faça");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "suas AK-47 atirarem");
-                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "projéteis radioativos!!!");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "com mais espaço, po-");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "demos colocar um reator");
+                        al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "o que pode dar errado?");
                     }else{
                         al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
                     }
@@ -1046,9 +1055,9 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeDormitorio, 569, 49, 0);
                 noBotaoAnteriorUD = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Olha, aquela");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "cadela não é");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "a Laika?");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeDormitorio){
@@ -1083,9 +1092,9 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeEstufa, 569, 76, 0);
                 noBotaoAnteriorUE = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Acho que o Trump");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "daria um bom espantalho");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "Xô corvos espaciais");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeEstufa){
@@ -1120,9 +1129,9 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeQuimica, 569, 103, 0);
                 noBotaoAnteriorUQ = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Agora sim podemos");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "fabricar VODKA para");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "todos cosmonautas!!!");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeQuimica){
@@ -1157,9 +1166,9 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeFisica, 569, 130, 0);
                 noBotaoAnteriorUF = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Agora iremos para a");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "lua... assim como os");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "americanos foram... ");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeFisica){
@@ -1194,9 +1203,9 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeRobotica, 569, 157, 0);
                 noBotaoAnteriorUR = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Da URSS para a");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "TERRA: precisamos ");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "do professor Zanetti");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeRobotica){
@@ -1231,9 +1240,9 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeNuclear, 569, 184, 0);
                 noBotaoAnteriorUN = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "A KGB quer desenvolver");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "armas AK-47 com pro-");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "jéteis radioativos!");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeNuclear){
@@ -1268,17 +1277,49 @@ int main(void){
                 al_draw_bitmap(botaoUpgradeFinal, 569, 211, 0);
                 noBotaoAnteriorUO = 1;
                 al_draw_bitmap(backgroundMonitor, 390, 274, 0);
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "Compre o upgrade");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "para passar de nível");
-                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,273 , ALLEGRO_ALIGN_LEFT, "O que? Quem são");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,285 , ALLEGRO_ALIGN_LEFT, "o Enzo Filippo");
+                al_draw_textf(fonteMenor, al_map_rgb(85, 255, 0), 393,297 , ALLEGRO_ALIGN_LEFT, "e Vitor Mateus?");
 
                 if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                     if(!upgradeFinal){
                         if(custoUpgradeFinal<=dinheiro){
                             if((upgradeNuclear==1)&&(upgradeDormitorio==1)&&(upgradeEstufa==1)&&(upgradeFisica==1)&&(upgradeQuimica==1)&&(upgradeRobotica==1)){
-                                dinheiro -= custoUpgradeFinal;
-                                al_draw_bitmap(led, 555, 212, 0);
-                                upgradeFinal=1;
+                                int iniciarNovoJogo = al_show_native_message_box(
+                                    janela,
+                                    "URSS - Ultimate Restless Space Station",
+                                    "Previet Camarada",
+                                    "Ao que tudo indica, você superou todos os desafios para criar uma estação espacial digna dos czares. Claro, os czares estão ultrapassados, mas sinto em dizer-lhe que você também está!"
+                                    " Nossos cientistas descobriram recentemente que estamos vivendo numa simulação computacional, que eles costumam chamar de jogo, parece uma invenção capitalista. Esta simulação foi"
+                                    " criada por Enzo Filippo e Vitor Mateus para ganhar algum tipo de promoção com um tal de Zanetti, eles são da turma T6 do curso de engenharia aeroespacial, pelo menos alguma coisa "
+                                    " é espacial de verdade. Nossas vidas tem sido uma mentira, nos escravizaram por entretenimento, em troca nos davam vodka! Na verdade, até que gosto da vodka, deseja continuar jogando?",
+                                    NULL,
+                                    ALLEGRO_MESSAGEBOX_YES_NO
+                                    );
+                                if (!iniciarNovoJogo){
+                                    al_play_sample(som_botao, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
+                                    saveGame(0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0);
+                                    al_destroy_sample(som_botao);
+                                    al_destroy_audio_stream(musica);
+                                    al_destroy_timer(timer);
+                                    al_destroy_font(fonte);
+                                    al_destroy_display(janela);
+                                    al_destroy_event_queue(filaEventos);
+                                    al_destroy_event_queue(filaEventosTimer);
+                                    inicializar();
+                                    interface_game();
+                                }else{
+                                    dinheiro -= custoUpgradeFinal;
+                                    al_draw_bitmap(led, 555, 212, 0);
+                                    upgradeFinal=1;
+                                    upgradeMultiplierDormitorio = 3;
+                                    upgradeMultiplierEstufa = 3;
+                                    upgradeMultiplierQuimica = 3;
+                                    upgradeMultiplierFisica = 3;
+                                    upgradeMultiplierRobotica = 3;
+                                    upgradeMultiplierNuclear = 3;
+                                }
+
                             }
                         }else{
                         al_play_sample(som_semDinheiro, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_ONCE,NULL);
